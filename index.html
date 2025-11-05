@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mimi - Aceite de Oliva Extra Virgen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --olive: #5a6b4a;
+            --dark-olive: #3d4a32;
+            --black: #1a1a1a;
+            --white: #fefefe;
+            --cream: #f8f6f3;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            color: var(--black);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            background: rgba(254, 254, 254, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(90, 107, 74, 0.1);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--olive);
+            letter-spacing: 3px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--olive);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--white) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            color: var(--olive);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            color: var(--dark-olive);
+            font-style: italic;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: var(--olive);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            border-radius: 2px;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .cta-button:hover {
+            background: var(--dark-olive);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(90, 107, 74, 0.3);
+        }
+
+        /* Decorative elements */
+        .olive-branch {
+            position: absolute;
+            opacity: 0.05;
+            font-size: 30rem;
+            color: var(--olive);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--olive);
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--dark-olive);
+            font-size: 1.2rem;
+            margin-bottom: 4rem;
+            font-style: italic;
+        }
+
+        /* Story Section */
+        .story {
+            background: var(--cream);
+        }
+
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .story-text p {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            color: var(--black);
+        }
+
+        .story-image {
+            height: 400px;
+            background: linear-gradient(135deg, var(--olive) 0%, var(--dark-olive) 100%);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: var(--white);
+            padding: 3rem;
+            border: 1px solid rgba(90, 107, 74, 0.2);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(90, 107, 74, 0.15);
+        }
+
+        .product-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--olive);
+        }
+
+        .product-card h3 {
+            font-size: 1.8rem;
+            color: var(--olive);
+            margin-bottom: 1rem;
+        }
+
+        .product-card p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--black);
+        }
+
+        /* Refill Section */
+        .refill {
+            background: var(--olive);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .refill .section-title,
+        .refill .section-subtitle {
+            color: var(--white);
+        }
+
+        .refill-benefits {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .benefit {
+            padding: 2rem;
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit p {
+            font-size: 1rem;
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* Values Section */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .value-icon {
+            font-size: 3.5rem;
+            color: var(--olive);
+            margin-bottom: 1rem;
+        }
+
+        .value-card h4 {
+            font-size: 1.4rem;
+            color: var(--olive);
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .contact-info {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-button {
+            padding: 1rem 2.5rem;
+            background: var(--white);
+            color: var(--olive);
+            text-decoration: none;
+            border: 2px solid var(--olive);
+            font-size: 1rem;
+            transition: all 0.3s;
+            letter-spacing: 1px;
+        }
+
+        .contact-button:hover {
+            background: var(--olive);
+            color: var(--white);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 5%;
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .story-content,
+            .products-grid,
+            .refill-benefits,
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">MIMI</div>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#historia">Historia</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#refill">Refill</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <div class="olive-branch">🌿</div>
+        <div class="hero-content">
+            <h1>La autenticidad de lo simple</h1>
+            <p class="tagline">Aceite de oliva extra virgen de San Rafael, Mendoza</p>
+            <a href="#productos" class="cta-button">DESCUBRÍ NUESTRO ACEITE</a>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story" id="historia">
+        <h2 class="section-title">Nuestra Historia</h2>
+        <p class="section-subtitle">De la finca de la abuela a tu mesa</p>
+        <div class="story-content">
+            <div class="story-text">
+                <p>Somos un emprendimiento familiar que nace del corazón de San Rafael, Mendoza, donde nuestra abuela ha cultivado olivos durante décadas con dedicación y amor.</p>
+                <p>Cada botella de nuestro aceite extra virgen, prensado en frío, lleva consigo la tradición olivícola mendocina y el cuidado artesanal que solo una producción familiar puede ofrecer.</p>
+                <p>Más que vender aceite, queremos acompañarte en tu cocina, en tus reuniones familiares y en cada comida compartida, llevando la autenticidad y calidad de Mendoza directo a Buenos Aires.</p>
+            </div>
+            <div class="story-image">
+                🫒
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products" id="productos">
+        <h2 class="section-title">Nuestros Productos</h2>
+        <p class="section-subtitle">Calidad premium en cada formato</p>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon">🍾</div>
+                <h3>Botella 500ml</h3>
+                <p>Diseño estético y sofisticado, ideal para tu mesa diaria. Perfecta para quienes buscan calidad en cada detalle y quieren mostrar un aceite premium en sus reuniones.</p>
+            </div>
+            <div class="product-card">
+                <div class="product-icon">🛢️</div>
+                <h3>Bidón 3 litros</h3>
+                <p>Sistema innovador de reposición para que recargues tus botellas de vidrio. Consumo constante de aceite fresco con una propuesta ecológica y sustentable.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Refill Section -->
+    <section class="refill" id="refill">
+        <h2 class="section-title">Sistema Refill</h2>
+        <p class="section-subtitle">Innovación sustentable para tu hogar</p>
+        <div class="refill-benefits">
+            <div class="benefit">
+                <div class="benefit-icon">♻️</div>
+                <h4>Sustentable</h4>
+                <p>Reducí envases descartables y cuidá el planeta mientras disfrutás de aceite fresco.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">💚</div>
+                <h4>Económico</h4>
+                <p>Mayor rendimiento con el formato de 3 litros para recargar tus botellas de vidrio.</p>
+            </div>
+            <div class="benefit">
+                <div class="benefit-icon">✨</div>
+                <h4>Práctico</h4>
+                <p>Mantené tu botella premium en la mesa y recargá cuando lo necesites.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values">
+        <h2 class="section-title">Nuestros Valores</h2>
+        <p class="section-subtitle">Lo que nos hace únicos</p>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">🏔️</div>
+                <h4>Origen Mendocino</h4>
+                <p>De San Rafael, con toda la pureza y prestigio de la tierra cuyana.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">👨‍👩‍👧‍👦</div>
+                <h4>Familiar</h4>
+                <p>Tradición de generaciones, con el toque de la nueva energía emprendedora.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🧊</div>
+                <h4>Prensado en Frío</h4>
+                <p>Proceso artesanal que preserva todos los nutrientes y sabor auténtico.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contacto">
+        <h2 class="section-title">Contactanos</h2>
+        <p class="section-subtitle">Llevá la autenticidad de Mendoza a tu mesa</p>
+        <div class="contact-info">
+            <p>¿Querés probar nuestro aceite premium o necesitás un regalo corporativo exclusivo? Escribinos y descubrí la diferencia.</p>
+            <div class="contact-buttons">
+                <a href="#" class="contact-button">WHATSAPP</a>
+                <a href="#" class="contact-button">INSTAGRAM</a>
+                <a href="#" class="contact-button">EMAIL</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 MIMI - Aceite de Oliva Extra Virgen | San Rafael, Mendoza</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-content');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - (scrolled / 700);
+            }
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card, .value-card, .benefit').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
