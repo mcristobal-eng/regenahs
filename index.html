@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mimi - Aceite de Oliva Extra Virgen</title>
+    <title>REGENAHS - Aceite de Oliva Extra Virgen Premium</title>
     <style>
         * {
             margin: 0;
@@ -12,43 +12,42 @@
         }
 
         :root {
-            --olive: #5a6b4a;
-            --dark-olive: #3d4a32;
-            --black: #1a1a1a;
-            --white: #fefefe;
-            --cream: #f8f6f3;
+            --primary: #2d3e2f;
+            --secondary: #7a9b76;
+            --accent: #c4a676;
+            --dark: #1a1a1a;
+            --light: #f5f5f0;
+            --white: #ffffff;
         }
 
         body {
-            font-family: 'Georgia', serif;
-            color: var(--black);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark);
             background: var(--white);
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* ============================================
-           NAVIGATION - Simplificado
-        ============================================ */
+        /* Navigation */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 1.2rem 5%;
-            background: rgba(254, 254, 254, 0.98);
-            backdrop-filter: blur(10px);
+            padding: 2rem 5%;
+            background: transparent;
             z-index: 1000;
-            border-bottom: 1px solid rgba(90, 107, 74, 0.1);
-            transition: padding 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         nav.scrolled {
-            padding: 0.8rem 5%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1.2rem 5%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
 
         nav .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
@@ -56,397 +55,903 @@
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--olive);
-            letter-spacing: 3px;
-            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 300;
+            color: var(--white);
+            letter-spacing: 8px;
             cursor: pointer;
         }
 
-        .logo:hover {
-            transform: scale(1.05);
-            color: var(--dark-olive);
+        nav.scrolled .logo {
+            color: var(--primary);
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 2.5rem;
+            gap: 3rem;
+            margin-left: auto;
+            margin-right: 2rem;
         }
 
         nav a {
             text-decoration: none;
-            color: var(--black);
-            font-size: 0.95rem;
+            color: var(--white);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             transition: all 0.3s ease;
-            letter-spacing: 1px;
+        }
+
+        nav.scrolled a {
+            color: var(--primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .cart-icon-container {
             position: relative;
-            padding-bottom: 5px;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
-        nav a::after {
-            content: '';
+        .cart-icon {
+            width: 24px;
+            height: 24px;
+            stroke: var(--white);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        nav.scrolled .cart-icon {
+            stroke: var(--primary);
+        }
+
+        .cart-badge {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--olive);
-            transition: width 0.3s ease;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+            display: none;
         }
 
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        nav a:hover {
-            color: var(--olive);
-        }
-
-        /* Hamburger Menu para mobile */
         .hamburger {
             display: none;
             flex-direction: column;
             cursor: pointer;
-            gap: 5px;
+            gap: 6px;
+            z-index: 1001;
         }
 
         .hamburger span {
-            width: 25px;
-            height: 3px;
-            background: var(--olive);
+            width: 30px;
+            height: 2px;
+            background: var(--white);
             transition: all 0.3s ease;
         }
 
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(8px, 8px);
+        nav.scrolled .hamburger span {
+            background: var(--primary);
         }
 
-        .hamburger.active span:nth-child(2) {
+        /* Cart Sidebar */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
             opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
+        .cart-overlay.active {
+            opacity: 1;
+            pointer-events: all;
         }
 
-        /* ============================================
-           HERO SECTION
-        ============================================ */
-        .hero {
-            min-height: 100vh;
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 450px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            transition: right 0.4s ease;
             display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--white) 100%);
-            position: relative;
-            overflow: hidden;
+        }
+
+        .cart-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .cart-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
             padding: 2rem;
         }
 
-        /* 📸 EDITABLE: Cambiá la imagen de fondo del hero aquí */
-        .hero::before {
-            content: '';
-            position: absolute;
+        .cart-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            opacity: 0.6;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--light);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .cart-item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .cart-item-details h3 {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-price {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .qty-value {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .cart-footer {
+            padding: 2rem;
+            border-top: 2px solid var(--light);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: var(--primary);
+        }
+
+        .checkout-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Checkout Modal */
+        .checkout-modal {
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1200');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.1;
-            z-index: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 11000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
         }
 
-        .hero-content {
-            text-align: center;
-            z-index: 2;
+        .checkout-modal.active {
+            display: flex;
+        }
+
+        .checkout-container {
+            background: var(--white);
+            width: 100%;
             max-width: 900px;
-            animation: fadeInUp 1s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
-        .hero h1 {
-            font-size: clamp(2rem, 6vw, 4.5rem);
-            color: var(--olive);
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
-        }
-
-        .hero .tagline {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--dark-olive);
-            font-style: italic;
-            margin-bottom: 3rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 3rem;
-            background: var(--olive);
+        .checkout-header {
+            padding: 2rem;
+            background: var(--primary);
             color: var(--white);
-            text-decoration: none;
-            font-size: 1.1rem;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            cursor: pointer;
-            border: 2px solid var(--olive);
-        }
-
-        .cta-button:hover {
-            background: transparent;
-            color: var(--olive);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(90, 107, 74, 0.3);
-        }
-
-        .cta-button:active {
-            transform: translateY(-1px);
-        }
-
-        /* ============================================
-           STORY SECTION
-        ============================================ */
-        .story {
-            background: var(--cream);
-            padding: 6rem 5%;
-        }
-
-        .story-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
 
-        .story-text p {
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            line-height: 1.9;
-            margin-bottom: 1.5rem;
-            color: var(--black);
+        .checkout-header h2 {
+            font-size: 1.5rem;
         }
 
-        .story-image {
-            height: 500px;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(90, 107, 74, 0.2);
-            transition: transform 0.5s ease;
-        }
-
-        .story-image:hover {
-            transform: scale(1.02);
-        }
-
-        /* 📸 EDITABLE: Cambiá la imagen de historia aquí */
-        .story-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .story-image:hover img {
-            transform: scale(1.05);
-        }
-
-        /* ============================================
-           PRODUCTS SECTION
-        ============================================ */
-        .products {
-            padding: 6rem 5%;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--olive);
-            text-align: center;
-            margin-bottom: 1rem;
-            letter-spacing: 1px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--dark-olive);
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            margin-bottom: 4rem;
-            font-style: italic;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .product-card {
-            background: var(--white);
-            padding: 3rem 2rem;
-            border: 1px solid rgba(90, 107, 74, 0.2);
-            transition: all 0.4s ease;
-            text-align: center;
+        .checkout-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 2rem;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
 
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(90, 107, 74, 0.05), transparent);
-            transition: left 0.5s ease;
+        .checkout-content {
+            padding: 2rem;
         }
 
-        .product-card:hover::before {
-            left: 100%;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(90, 107, 74, 0.2);
-            border-color: var(--olive);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 250px;
-            margin-bottom: 1.5rem;
-            border-radius: 4px;
-            overflow: hidden;
-            background: var(--cream);
-        }
-
-        /* 📸 EDITABLE: Cambiá las imágenes de productos aquí */
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.1);
-        }
-
-        .product-card h3 {
-            font-size: clamp(1.3rem, 3vw, 1.8rem);
-            color: var(--olive);
-            margin-bottom: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .product-card:hover h3 {
-            color: var(--dark-olive);
-        }
-
-        .product-card p {
-            font-size: clamp(0.9rem, 2vw, 1.05rem);
-            line-height: 1.7;
-            color: var(--black);
-        }
-
-        /* ============================================
-           CONTACT SECTION
-        ============================================ */
-        .contact {
-            background: var(--olive);
-            color: var(--white);
-            padding: 6rem 5%;
-            text-align: center;
-        }
-
-        .contact .section-title,
-        .contact .section-subtitle {
-            color: var(--white);
-        }
-
-        .contact-info {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .contact-info p {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            line-height: 1.8;
+        .checkout-section {
             margin-bottom: 3rem;
         }
 
-        .contact-buttons {
+        .checkout-section h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--light);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .payment-option-card {
+            padding: 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option-card:hover {
+            border-color: var(--accent);
+        }
+
+        .payment-option-card.active {
+            border-color: var(--accent);
+            background: rgba(196, 166, 118, 0.05);
+        }
+
+        .payment-option-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-option-description {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .order-summary {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+
+        .summary-item {
             display: flex;
-            gap: 1.5rem;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(45, 62, 47, 0.1);
+        }
+
+        .summary-item.total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            border-top: 2px solid var(--primary);
+            padding-top: 1rem;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--accent);
+            color: var(--white);
+            border: none;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .place-order-btn:hover {
+            background: var(--primary);
+        }
+
+        .payment-info-box {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1920') center/cover;
+            filter: brightness(0.7);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(45, 62, 47, 0.6) 0%, rgba(26, 26, 26, 0.4) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: var(--white);
+            max-width: 1000px;
+            padding: 2rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 2rem;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 2rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .contact-button {
-            padding: 1.2rem 2.5rem;
-            background: var(--white);
-            color: var(--olive);
+        .btn-primary,
+        .btn-secondary {
+            padding: 1.2rem 3rem;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             text-decoration: none;
-            border: 2px solid var(--white);
-            font-size: 1rem;
             transition: all 0.3s ease;
-            letter-spacing: 1px;
-            cursor: pointer;
-            border-radius: 2px;
-            font-weight: bold;
+            display: inline-block;
         }
 
-        .contact-button:hover {
+        .btn-primary {
+            background: var(--accent);
+            color: var(--white);
+            border: 2px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
             background: transparent;
             color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid var(--white);
         }
 
-        .contact-button:active {
-            transform: translateY(-1px);
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary);
         }
 
-        /* ============================================
-           FOOTER
-        ============================================ */
-        footer {
-            background: var(--black);
+        /* Story */
+        .story {
+            background: var(--light);
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 100vh;
+        }
+
+        .story-image-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .story-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 6rem;
+            background: var(--white);
+        }
+
+        .story-label {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .story h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-family: 'Georgia', serif;
+            text-align: left;
+            line-height: 1.2;
+        }
+
+        .story p {
+            font-size: 1.15rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .story-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(45, 62, 47, 0.1);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--accent);
+            font-family: 'Georgia', serif;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+        }
+
+        /* Products */
+        .products {
+            padding: 8rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 6rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .products-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem;
+        }
+
+        .product-card {
+            background: var(--light);
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .product-info {
+            padding: 3rem;
+        }
+
+        .product-info h3 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-family: 'Georgia', serif;
+            text-align: left;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', serif;
+            text-align: left;
+        }
+
+        .product-info p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .product-features {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .feature-tag {
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            border: 1px solid rgba(45, 62, 47, 0.2);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .product-cta {
+            width: 100%;
+            padding: 1rem 2.5rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .product-cta:hover {
+            background: var(--accent);
+        }
+
+        /* Contact */
+        .contact {
+            padding: 10rem 5%;
+            background: var(--primary);
             color: var(--white);
             text-align: center;
-            padding: 2rem 5%;
         }
 
-        footer p {
+        .contact h2 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 2rem;
+            font-family: 'Georgia', serif;
+            line-height: 1.2;
+        }
+
+        .contact p {
+            font-size: 1.3rem;
+            margin-bottom: 4rem;
+            line-height: 1.8;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 1.5rem 3rem;
+            background: var(--accent);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+            display: inline-block;
+        }
+
+        .contact-btn:hover {
+            background: transparent;
+        }
+
+        .contact-btn.outline {
+            background: transparent;
+            border: 2px solid var(--white);
+        }
+
+        .contact-btn.outline:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 4rem 5%;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Georgia', serif;
+            font-size: 1.8rem;
+            letter-spacing: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            line-height: 1.8;
+        }
+
+        .footer-links h4 {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
             opacity: 0.7;
-            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 0.8rem;
         }
 
-        /* ============================================
-           ANIMATIONS
-        ============================================ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .success-message svg {
+            width: 80px;
+            height: 80px;
+            stroke: #27ae60;
+            margin-bottom: 2rem;
+        }
+
+        .success-message h3 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
         .fade-in {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(40px);
             transition: all 0.8s ease;
         }
 
@@ -455,23 +960,66 @@
             transform: translateY(0);
         }
 
-        /* ============================================
-           RESPONSIVE DESIGN
-        ============================================ */
-        @media (max-width: 968px) {
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .products-grid {
+                gap: 3rem;
+            }
+
+            .product-info {
+                padding: 2rem;
+            }
+
+            .story-content {
+                padding: 6rem 4rem;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .story-grid,
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-image-container {
+                min-height: 400px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 4%;
+            }
+
             nav ul {
                 position: fixed;
-                top: 70px;
+                top: 0;
                 left: -100%;
-                width: 100%;
-                height: calc(100vh - 70px);
-                background: rgba(254, 254, 254, 0.98);
-                backdrop-filter: blur(10px);
+                width: 80%;
+                height: 100vh;
+                background: rgba(45, 62, 47, 0.98);
+                backdrop-filter: blur(20px);
                 flex-direction: column;
-                justify-content: flex-start;
-                padding: 3rem 2rem;
+                justify-content: center;
+                align-items: center;
+                padding: 3rem;
                 gap: 2rem;
-                transition: left 0.3s ease;
+                transition: left 0.4s ease;
+                z-index: 999;
+                margin: 0;
             }
 
             nav ul.active {
@@ -483,226 +1031,860 @@
                 text-align: center;
             }
 
-            nav a {
-                font-size: 1.3rem;
-                display: block;
-                padding: 1rem;
-            }
-
             .hamburger {
                 display: flex;
             }
 
+            .logo {
+                font-size: 1.5rem;
+                letter-spacing: 4px;
+            }
+
+            .hero {
+                height: 100vh;
+                min-height: 700px;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 3px;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 10vw, 4rem);
+                letter-spacing: 4px;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-description {
+                font-size: 1.1rem;
+                margin-bottom: 2.5rem;
+                padding: 0 1rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+                padding: 1rem 2rem;
+            }
+
             .story-content {
+                padding: 4rem 2rem;
+            }
+
+            .story h2 {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .story p {
+                font-size: 1rem;
+            }
+
+            .story-stats {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
-            .story-image {
-                height: 350px;
+            .products {
+                padding: 4rem 4%;
             }
 
-            .products-grid {
-                grid-template-columns: 1fr;
+            .section-header {
+                margin-bottom: 3rem;
+            }
+
+            .section-title {
+                font-size: clamp(2rem, 8vw, 3rem);
+            }
+
+            .section-description {
+                font-size: 1rem;
+            }
+
+            .product-image {
+                height: 300px;
+            }
+
+            .product-info h3 {
+                font-size: 1.5rem;
+            }
+
+            .product-price {
+                font-size: 1.5rem;
+            }
+
+            .contact {
+                padding: 6rem 4%;
+            }
+
+            .contact h2 {
+                font-size: clamp(2rem, 8vw, 3.5rem);
+            }
+
+            .contact p {
+                font-size: 1.1rem;
+                margin-bottom: 3rem;
             }
 
             .contact-buttons {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 1rem;
+                align-items: center;
             }
 
-            .contact-button {
+            .contact-btn {
                 width: 100%;
+                max-width: 300px;
+                padding: 1.2rem 2rem;
+            }
+
+            .cart-sidebar {
+                max-width: 100%;
+            }
+
+            .cart-header {
+                padding: 1.5rem;
+            }
+
+            .cart-items {
+                padding: 1.5rem;
+            }
+
+            .cart-footer {
+                padding: 1.5rem;
+            }
+
+            .cart-total {
+                font-size: 1.3rem;
+            }
+
+            .checkout-modal {
+                padding: 0.5rem;
+            }
+
+            .checkout-header {
+                padding: 1.5rem;
+            }
+
+            .checkout-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .checkout-content {
+                padding: 1.5rem;
+            }
+
+            .checkout-section h3 {
+                font-size: 1.1rem;
+            }
+
+            .payment-option-card {
+                padding: 1rem;
+            }
+
+            .payment-option-title {
+                font-size: 1rem;
+            }
+
+            .order-summary {
+                padding: 1.5rem;
+            }
+
+            footer {
+                padding: 3rem 4%;
             }
         }
 
         @media (max-width: 480px) {
             nav {
-                padding: 1rem 4%;
+                padding: 1.2rem 4%;
             }
 
-            .hero {
-                padding: 1rem;
+            .logo {
+                font-size: 1.3rem;
+                letter-spacing: 3px;
             }
 
-            .cta-button {
-                padding: 0.9rem 2rem;
+            .hero-subtitle {
+                font-size: 0.8rem;
+                letter-spacing: 2px;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 10vw, 3rem);
+                letter-spacing: 2px;
+            }
+
+            .hero-description {
                 font-size: 1rem;
             }
 
-            .story,
-            .products,
-            .contact {
-                padding: 4rem 4%;
+            .cart-item {
+                grid-template-columns: 70px 1fr auto;
+                gap: 1rem;
+                padding: 1rem;
             }
 
-            .product-card {
-                padding: 2rem 1.5rem;
+            .cart-item-image {
+                width: 70px;
+                height: 70px;
+            }
+
+            .cart-item-details h3 {
+                font-size: 0.9rem;
+            }
+
+            .cart-item-price {
+                font-size: 1rem;
+            }
+
+            .qty-btn {
+                width: 28px;
+                height: 28px;
+                font-size: 1rem;
+            }
+
+            .product-info {
+                padding: 1.5rem;
+            }
+
+            .product-info h3 {
+                font-size: 1.3rem;
+            }
+
+            .product-price {
+                font-size: 1.3rem;
+            }
+
+            .feature-tag {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.75rem;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+
+            .place-order-btn {
+                padding: 1.2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .logo {
+                font-size: 1.1rem;
+                letter-spacing: 2px;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .cart-item {
+                grid-template-columns: 60px 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .cart-item-remove {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+                align-self: start;
             }
         }
     </style>
 </head>
 <body>
-    <!-- ============================================
-         NAVIGATION
-    ============================================ -->
+    <!-- Navigation -->
     <nav id="navbar">
         <div class="container">
-            <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">MIMI</div>
+            <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">REGENAHS</div>
             <ul id="navMenu">
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#historia">Historia</a></li>
                 <li><a href="#productos">Productos</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="nav-actions">
+                <div class="cart-icon-container" id="cartIcon">
+                    <svg class="cart-icon" viewBox="0 0 24 24">
+                        <path d="M9 2L6 6H3v14h18V6h-3L15 2H9zm0 2h6l2 2H7l2-2zm-5 4h16v12H4V8z"/>
+                        <path d="M8 10v6M16 10v6"/>
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- ============================================
-         HERO SECTION
-         📝 EDITABLE: Cambiá el título y subtítulo aquí
-    ============================================ -->
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Tu Carrito</h2>
+            <button class="cart-close" id="cartClose">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <p>Tu carrito está vacío</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" disabled>Finalizar Compra</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-container">
+            <div class="checkout-header">
+                <h2>Finalizar Compra</h2>
+                <button class="checkout-close" id="checkoutClose">&times;</button>
+            </div>
+            <div class="checkout-content" id="checkoutContent">
+                <form id="checkoutForm">
+                    <div class="checkout-section">
+                        <h3>📋 Información Personal</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Apellido *</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono *</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section">
+                        <h3>🏠 Dirección de Envío</h3>
+                        <div class="form-group">
+                            <label>Dirección *</label>
+                            <input type="text" id="address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ciudad *</label>
+                                <input type="text" id="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Código Postal *</label>
+                                <input type="text" id="postalCode" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Notas adicionales</label>
+                            <textarea id="notes" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section">
+                        <h3>💳 Método de Pago</h3>
+                        <div class="payment-option-card active" data-payment="whatsapp">
+                            <div class="payment-option-title">💬 WhatsApp</div>
+                            <div class="payment-option-description">Enviá tu pedido por WhatsApp y coordiná el pago</div>
+                        </div>
+                        <div class="payment-option-card" data-payment="transfer">
+                            <div class="payment-option-title">🏦 Transferencia Bancaria</div>
+                            <div class="payment-option-description">Realiza una transferencia desde tu home banking</div>
+                        </div>
+                        <div class="payment-option-card" data-payment="cash">
+                            <div class="payment-option-title">💵 Efectivo</div>
+                            <div class="payment-option-description">Paga en efectivo al recibir tu pedido</div>
+                        </div>
+                        
+                        <div id="paymentInfo" class="payment-info-box">
+                            <p style="margin: 0; line-height: 1.6;">
+                                <strong>💬 Completá tus datos y confirmá tu pedido.</strong><br>
+                                Te redirigiremos a WhatsApp para coordinar el pago y la entrega.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-section">
+                        <h3>📦 Resumen del Pedido</h3>
+                        <div class="order-summary" id="orderSummary"></div>
+                    </div>
+
+                    <button type="submit" class="place-order-btn" id="placeOrderBtn">Confirmar Pedido</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero -->
     <section class="hero" id="inicio">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-            <h1>La autenticidad de lo simple</h1>
-            <p class="tagline">Aceite de oliva extra virgen de San Rafael, Mendoza</p>
-            <a href="#productos" class="cta-button">DESCUBRÍ NUESTRO ACEITE</a>
+            <p class="hero-subtitle">San Rafael, Mendoza</p>
+            <h1>La autenticidad<br>de lo simple</h1>
+            <p class="hero-description">
+                Aceite de oliva extra virgen, prensado en frío, elaborado con la tradición de generaciones y el cuidado que solo una familia puede ofrecer.
+            </p>
+            <div class="hero-cta">
+                <a href="#productos" class="btn-primary">Explorar Productos</a>
+                <a href="#historia" class="btn-secondary">Nuestra Historia</a>
+            </div>
         </div>
     </section>
 
-    <!-- ============================================
-         STORY SECTION
-         📝 EDITABLE: Cambiá el texto y la imagen aquí
-    ============================================ -->
+    <!-- Story -->
     <section class="story fade-in" id="historia">
-        <h2 class="section-title">Nuestra Historia</h2>
-        <p class="section-subtitle">De la finca de la abuela a tu mesa</p>
-        <div class="story-content">
-            <div class="story-text">
+        <div class="story-grid">
+            <div class="story-image-container">
+                <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1000" alt="Olivares">
+            </div>
+            <div class="story-content">
+                <p class="story-label">Nuestra Historia</p>
+                <h2>De la finca de la abuela a tu mesa</h2>
                 <p>Somos un emprendimiento familiar que nace del corazón de San Rafael, Mendoza, donde nuestra abuela ha cultivado olivos durante décadas con dedicación y amor.</p>
                 <p>Cada botella de nuestro aceite extra virgen, prensado en frío, lleva consigo la tradición olivícola mendocina y el cuidado artesanal que solo una producción familiar puede ofrecer.</p>
-                <p>Más que vender aceite, queremos acompañarte en tu cocina, en tus reuniones familiares y en cada comida compartida, llevando la autenticidad y calidad de Mendoza directo a Buenos Aires.</p>
-            </div>
-            <div class="story-image">
-                <!-- 📸 CAMBIAR IMAGEN: Reemplazá el src con tu foto -->
-                <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=800" alt="Olivares en Mendoza">
+                <p>Más que vender aceite, queremos acompañarte en tu cocina, en tus reuniones familiares y en cada comida compartida.</p>
+                <div class="story-stats">
+                    <div class="stat">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Años de tradición</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Extra Virgen</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">5★</span>
+                        <span class="stat-label">Calidad Premium</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         PRODUCTS SECTION
-         📝 EDITABLE: Cambiá texto e imágenes de productos
-    ============================================ -->
+    <!-- Products -->
     <section class="products fade-in" id="productos">
-        <h2 class="section-title">Nuestros Productos</h2>
-        <p class="section-subtitle">Calidad premium en cada formato</p>
+        <div class="section-header">
+            <p class="section-label">Productos</p>
+            <h2 class="section-title">Calidad premium en cada formato</h2>
+            <p class="section-description">
+                Nuestro aceite de oliva extra virgen está disponible en dos presentaciones diseñadas para acompañarte en cada momento.
+            </p>
+        </div>
         <div class="products-grid">
-            
-            <!-- Producto 1: Botella 500ml -->
             <div class="product-card">
                 <div class="product-image">
-                    <!-- 📸 CAMBIAR IMAGEN: Reemplazá con foto de tu botella -->
-                    <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400" alt="Botella 500ml">
+                    <img src="https://i.imgur.com/Vft5kaS.jpeg" alt="Botella 500ml">
+                    <div class="product-badge">Premium</div>
                 </div>
-                <h3>Botella 500ml</h3>
-                <p>Diseño estético y sofisticado, ideal para tu mesa diaria. Perfecta para quienes buscan calidad en cada detalle y quieren mostrar un aceite premium en sus reuniones.</p>
+                <div class="product-info">
+                    <h3>Botella 500ml</h3>
+                    <div class="product-price">$4.500</div>
+                    <p>Diseño estético y sofisticado, ideal para tu mesa diaria. Perfecta para quienes buscan calidad en cada detalle.</p>
+                    <div class="product-features">
+                        <span class="feature-tag">Extra Virgen</span>
+                        <span class="feature-tag">Prensado en Frío</span>
+                        <span class="feature-tag">Premium</span>
+                    </div>
+                    <button class="product-cta add-to-cart" data-id="500ml" data-name="Botella 500ml" data-price="4500" data-image="https://i.imgur.com/Vft5kaS.jpeg">
+                        Agregar al Carrito
+                    </button>
+                </div>
             </div>
 
-            <!-- Producto 2: Bidón 3 litros -->
             <div class="product-card">
                 <div class="product-image">
-                    <!-- 📸 CAMBIAR IMAGEN: Reemplazá con foto de tu bidón -->
-                    <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400" alt="Bidón 3 litros">
+                    <img src="https://i.imgur.com/Vft5kaS.jpeg" alt="Bidón 3L">
+                    <div class="product-badge">Refill</div>
                 </div>
-                <h3>Bidón 3 litros</h3>
-                <p>Sistema innovador de reposición para que recargues tus botellas de vidrio. Consumo constante de aceite fresco con una propuesta ecológica y sustentable.</p>
+                <div class="product-info">
+                    <h3>Bidón 3 litros</h3>
+                    <div class="product-price">$18.900</div>
+                    <p>Sistema innovador de reposición para que recargues tus botellas. Propuesta ecológica y sustentable.</p>
+                    <div class="product-features">
+                        <span class="feature-tag">Sustentable</span>
+                        <span class="feature-tag">Económico</span>
+                        <span class="feature-tag">Eco-Friendly</span>
+                    </div>
+                    <button class="product-cta add-to-cart" data-id="3l" data-name="Bidón 3 litros" data-price="18900" data-image="https://i.imgur.com/Vft5kaS.jpeg">
+                        Agregar al Carrito
+                    </button>
+                </div>
             </div>
-
         </div>
     </section>
 
-    <!-- ============================================
-         CONTACT SECTION
-         📝 EDITABLE: Cambiá los links de contacto
-    ============================================ -->
+    <!-- Contact -->
     <section class="contact fade-in" id="contacto">
-        <h2 class="section-title">Contactanos</h2>
-        <p class="section-subtitle">Llevá la autenticidad de Mendoza a tu mesa</p>
-        <div class="contact-info">
+        <div class="contact-content">
+            <h2>Llevá la autenticidad de Mendoza a tu mesa</h2>
             <p>¿Querés probar nuestro aceite premium o necesitás un regalo corporativo exclusivo? Escribinos y descubrí la diferencia.</p>
             <div class="contact-buttons">
-                <!-- 📝 CAMBIAR LINKS: Reemplazá con tus datos reales -->
-                <a href="https://wa.me/5491112345678?text=Hola!%20Quiero%20saber%20más%20sobre%20el%20aceite%20Mimi" class="contact-button" target="_blank">WHATSAPP</a>
-                <a href="https://instagram.com/tu_usuario" class="contact-button" target="_blank">INSTAGRAM</a>
-                <a href="mailto:hola@mimiaceitedeolivamendocino.com" class="contact-button">EMAIL</a>
+                <a href="https://wa.me/5491169614456?text=Hola!%20Quiero%20saber%20más%20sobre%20REGENAHS" class="contact-btn" target="_blank">WhatsApp</a>
+                <a href="https://instagram.com/regenahs.aceite" class="contact-btn outline" target="_blank">Instagram</a>
+                <a href="mailto:hola@regenahs.com" class="contact-btn outline">Email</a>
             </div>
         </div>
     </section>
 
-    <!-- ============================================
-         FOOTER
-    ============================================ -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 MIMI - Aceite de Oliva Extra Virgen | San Rafael, Mendoza</p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>REGENAHS</h3>
+                <p>Aceite de oliva extra virgen de San Rafael, Mendoza. Tradición familiar, calidad premium y compromiso con la sustentabilidad.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#historia">Historia</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="https://wa.me/5491169614456" target="_blank">WhatsApp</a></li>
+                    <li><a href="https://instagram.com/regenahs.aceite" target="_blank">Instagram</a></li>
+                    <li><a href="mailto:hola@regenahs.com">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 REGENAHS - Aceite de Oliva Extra Virgen | San Rafael, Mendoza</p>
+        </div>
     </footer>
 
-    <!-- ============================================
-         JAVASCRIPT - Interactividad
-    ============================================ -->
     <script>
-        // Smooth scrolling para todos los links
+        let cart = [];
+        let selectedPaymentMethod = 'whatsapp';
+
+        const cartIcon = document.getElementById('cartIcon');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const cartClose = document.getElementById('cartClose');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartItems = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const checkoutModal = document.getElementById('checkoutModal');
+        const checkoutClose = document.getElementById('checkoutClose');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const orderSummary = document.getElementById('orderSummary');
+        const checkoutContent = document.getElementById('checkoutContent');
+
+        function updateCart() {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+            cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="cart-empty"><p>Tu carrito está vacío</p></div>';
+                checkoutBtn.disabled = true;
+            } else {
+                cartItems.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <h3>${item.name}</h3>
+                            <div class="cart-item-price">${formatPrice(item.price)}</div>
+                            <div class="cart-item-quantity">
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">−</button>
+                                <span class="qty-value">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">&times;</button>
+                    </div>
+                `).join('');
+                checkoutBtn.disabled = false;
+            }
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.textContent = `${formatPrice(total)}`;
+        }
+
+        function addToCart(id, name, price, image) {
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ id, name, price, image, quantity: 1 });
+            }
+            updateCart();
+            openCart();
+            showNotification('Producto agregado al carrito');
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCart();
+        }
+
+        function updateQuantity(id, change) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        function formatPrice(price) {
+            return '
+             + price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function openCart() {
+            cartSidebar.classList.add('active');
+            cartOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--accent);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                z-index: 10002;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        function openCheckout() {
+            updateOrderSummary();
+            checkoutModal.classList.add('active');
+            closeCart();
+        }
+
+        function closeCheckout() {
+            checkoutModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function updateOrderSummary() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            orderSummary.innerHTML = `
+                ${cart.map(item => `
+                    <div class="summary-item">
+                        <span>${item.name} × ${item.quantity}</span>
+                        <span>${formatPrice(item.price * item.quantity)}</span>
+                    </div>
+                `).join('')}
+                <div class="summary-item total">
+                    <span>Total a Pagar</span>
+                    <span>${formatPrice(total)}</span>
+                </div>
+            `;
+        }
+
+        function generateWhatsAppMessage() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const postalCode = document.getElementById('postalCode').value;
+            const notes = document.getElementById('notes').value;
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            let message = `🛒 *NUEVO PEDIDO - REGENAHS*\n\n`;
+            message += `👤 *Cliente:* ${firstName} ${lastName}\n`;
+            message += `📧 *Email:* ${email}\n`;
+            message += `📱 *Teléfono:* ${phone}\n\n`;
+            message += `📦 *Productos:*\n`;
+            
+            cart.forEach(item => {
+                message += `• ${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}\n`;
+            });
+            
+            message += `\n💰 *TOTAL: ${formatPrice(total)}*\n\n`;
+            message += `🏠 *Dirección de envío:*\n`;
+            message += `${address}\n`;
+            message += `${city}, CP: ${postalCode}\n\n`;
+            
+            const paymentMethods = {
+                'whatsapp': '💬 WhatsApp (a coordinar)',
+                'transfer': '🏦 Transferencia Bancaria',
+                'cash': '💵 Efectivo al recibir'
+            };
+            
+            message += `💳 *Método de pago:* ${paymentMethods[selectedPaymentMethod]}\n`;
+            
+            if (notes) {
+                message += `\n📝 *Notas:* ${notes}`;
+            }
+            
+            return encodeURIComponent(message);
+        }
+
+        cartIcon.addEventListener('click', openCart);
+        cartClose.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+        checkoutClose.addEventListener('click', closeCheckout);
+        checkoutBtn.addEventListener('click', openCheckout);
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                addToCart(
+                    this.dataset.id,
+                    this.dataset.name,
+                    parseInt(this.dataset.price),
+                    this.dataset.image
+                );
+            });
+        });
+
+        document.querySelectorAll('.payment-option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.payment-option-card').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                selectedPaymentMethod = this.dataset.payment;
+
+                const paymentInfo = document.getElementById('paymentInfo');
+                
+                if (selectedPaymentMethod === 'whatsapp') {
+                    paymentInfo.innerHTML = `
+                        <p style="margin: 0; line-height: 1.6;">
+                            <strong>💬 Completá tus datos y confirmá tu pedido.</strong><br>
+                            Te redirigiremos a WhatsApp para coordinar el pago y la entrega.
+                        </p>
+                    `;
+                } else if (selectedPaymentMethod === 'transfer') {
+                    paymentInfo.innerHTML = `
+                        <p style="margin: 0; line-height: 1.6;">
+                            <strong>📱 Datos para transferencia:</strong><br>
+                            CBU: 0000003100075760797125<br>
+                            Alias: aceite.regenahs<br>
+                            Titular: REGENAHS S.A.<br><br>
+                            <em>Luego de confirmar, enviá tu pedido por WhatsApp con el comprobante.</em>
+                        </p>
+                    `;
+                } else if (selectedPaymentMethod === 'cash') {
+                    paymentInfo.innerHTML = `
+                        <p style="margin: 0; line-height: 1.6;">
+                            <strong>💵 Pago en efectivo:</strong><br>
+                            Podrás abonar en efectivo al momento de recibir tu pedido.<br><br>
+                            <em>Confirmá tu pedido y te contactaremos para coordinar la entrega.</em>
+                        </p>
+                    `;
+                }
+            });
+        });
+
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const whatsappMessage = generateWhatsAppMessage();
+            const whatsappUrl = `https://wa.me/5491169614456?text=${whatsappMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+            
+            checkoutContent.innerHTML = `
+                <div class="success-message">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    <h3>¡Pedido Enviado!</h3>
+                    <p>Tu pedido se abrió en WhatsApp. Envialo para confirmar tu compra y te contactaremos pronto para coordinar la entrega.</p>
+                    <button class="btn-primary" onclick="closeCheckoutAndClearCart()" style="margin-top: 2rem; border: none; cursor: pointer; padding: 1rem 3rem;">
+                        Continuar Comprando
+                    </button>
+                </div>
+            `;
+        });
+
+        function closeCheckoutAndClearCart() {
+            cart = [];
+            updateCart();
+            closeCheckout();
+            location.reload();
+        }
+
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+        const navbar = document.getElementById('navbar');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Cerrar menú mobile si está abierto
-                    document.getElementById('navMenu').classList.remove('active');
-                    document.getElementById('hamburger').classList.remove('active');
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    navMenu.classList.remove('active');
                 }
             });
         });
-
-        // Hamburger menu toggle
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-
-        // Navbar scroll effect
-        let lastScroll = 0;
-        const navbar = document.getElementById('navbar');
-
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-            
-            lastScroll = currentScroll;
-        });
-
-        // Fade in on scroll animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -710,73 +1892,9 @@
                     entry.target.classList.add('visible');
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.15 });
 
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Hover effect para product cards
-        const productCards = document.querySelectorAll('.product-card');
-        productCards.forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-10px) scale(1.02)';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Click effect para botones
-        const buttons = document.querySelectorAll('.cta-button, .contact-button');
-        buttons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                // Crear ripple effect
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.cssText = `
-                    position: absolute;
-                    width: ${size}px;
-                    height: ${size}px;
-                    border-radius: 50%;
-                    background: rgba(255,255,255,0.5);
-                    left: ${x}px;
-                    top: ${y}px;
-                    pointer-events: none;
-                    animation: ripple 0.6s ease-out;
-                `;
-                
-                this.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
-
-        // CSS para ripple effect
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Parallax effect suave en hero
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const hero = document.querySelector('.hero-content');
-            if (hero && scrolled < window.innerHeight) {
-                hero.style.transform = `translateY(${scrolled * 0.3}px)`;
-                hero.style.opacity = 1 - (scrolled / 700);
-            }
-        });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
