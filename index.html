@@ -6,109 +6,191 @@
     <title>REGENAHS - Aceite de Oliva Extra Virgen Premium</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --primary: #2d3e2f; --accent: #c4a676; --dark: #1a1a1a; --light: #f5f5f0; --white: #ffffff; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--dark); background: var(--white); line-height: 1.6; }
+        :root { 
+            --primary: #2d3e2f; 
+            --accent: #c4a676; 
+            --dark: #1a1a1a; 
+            --light: #f9f8f6; /* Un tono más cálido, menos gris */
+            --white: #ffffff; 
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--dark); background: var(--white); line-height: 1.6; overflow-x: hidden; }
         
-        /* Estilos Base y Navegación */
-        nav { position: fixed; top: 0; width: 100%; padding: 2rem 5%; background: transparent; z-index: 1000; transition: all 0.4s ease; }
-        nav.scrolled { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); padding: 1.2rem 5%; box-shadow: 0 4px 30px rgba(0,0,0,0.05); }
+        /* --- NAVEGACIÓN RESPONSIVE --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 1.5rem 5%; background: transparent; z-index: 1000; transition: all 0.4s ease; }
+        nav.scrolled { background: rgba(255,255,255,0.98); padding: 1rem 5%; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         nav .container { max-width: 1600px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: Georgia, serif; font-size: 2rem; font-weight: 300; color: var(--white); letter-spacing: 8px; cursor: pointer; }
+        .logo { font-family: Georgia, serif; font-size: 1.8rem; font-weight: 300; color: var(--white); letter-spacing: 6px; cursor: pointer; z-index: 1002; }
         nav.scrolled .logo { color: var(--primary); }
-        .nav-right { display: flex; align-items: center; gap: 3rem; }
-        nav ul { display: flex; list-style: none; gap: 3rem; }
-        nav a { text-decoration: none; color: var(--white); font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; }
-        nav.scrolled a { color: var(--primary); }
-        .cart-icon-container { position: relative; cursor: pointer; padding: 0.5rem; font-size: 1.5rem; }
+        
+        .nav-right { display: flex; align-items: center; gap: 2rem; }
+        .nav-links { display: flex; list-style: none; gap: 2.5rem; }
+        .nav-links a { text-decoration: none; color: var(--white); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+        nav.scrolled .nav-links a { color: var(--primary); }
+        nav.scrolled .nav-links a:hover { color: var(--accent); }
+
+        .cart-icon-container { position: relative; cursor: pointer; font-size: 1.4rem; color: var(--white); z-index: 1002; }
         nav.scrolled .cart-icon-container { color: var(--primary); }
-        .cart-badge { position: absolute; top: -5px; right: -5px; background: var(--accent); color: var(--white); font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: 10px; display: none; }
+        .cart-badge { position: absolute; top: -5px; right: -8px; background: var(--accent); color: var(--white); font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 10px; display: none; }
 
-        /* Carrito */
-        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.5); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .cart-overlay.active { opacity: 1; pointer-events: all; }
-        .cart-sidebar { position: fixed; top: 0; right: -100%; width: 100%; max-width: 450px; height: 100vh; background: var(--white); box-shadow: -5px 0 30px rgba(0,0,0,0.2); z-index: 10000; transition: right 0.4s ease; display: flex; flex-direction: column; }
+        /* Menú Hamburguesa (Mobile) */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 1002; }
+        .bar { width: 25px; height: 2px; background-color: var(--white); transition: 0.3s; }
+        nav.scrolled .bar { background-color: var(--primary); }
+
+        /* --- CARRITO & MODALES --- */
+        .cart-overlay, .checkout-modal, .image-zoom-modal { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; 
+        }
+        .cart-overlay.active, .checkout-modal.active, .image-zoom-modal.active { opacity: 1; pointer-events: all; }
+        
+        .cart-sidebar { 
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; 
+            background: var(--white); z-index: 10000; transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1); 
+            display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+        }
         .cart-sidebar.active { right: 0; }
-        .cart-header { padding: 2rem; border-bottom: 1px solid var(--light); display: flex; justify-content: space-between; align-items: center; }
-        .cart-close { background: none; border: none; font-size: 2rem; cursor: pointer; }
-        .cart-items { flex: 1; overflow-y: auto; padding: 2rem; }
-        .cart-empty { text-align: center; padding: 4rem 2rem; opacity: 0.6; }
-        .cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 1rem; padding: 1rem; background: var(--light); margin-bottom: 1rem; border-radius: 8px; align-items: center; }
-        .cart-item-image { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
-        .cart-item-quantity { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
-        .qty-btn { width: 25px; height: 25px; border: 1px solid var(--primary); background: var(--white); cursor: pointer; border-radius: 4px; }
-        .cart-item-remove { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 1.2rem; }
-        .cart-footer { padding: 2rem; border-top: 2px solid var(--light); }
-        .cart-total { display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 1.5rem; font-weight: 600; }
-        .checkout-btn { width: 100%; padding: 1.2rem; background: var(--accent); color: var(--white); border: none; font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
-        .checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .cart-header { padding: 1.5rem; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h2 { font-family: Georgia, serif; color: var(--primary); }
+        .cart-close { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--dark); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; }
+        .cart-empty { text-align: center; padding: 3rem 1rem; opacity: 0.5; }
+        
+        .cart-item { display: grid; grid-template-columns: 70px 1fr auto; gap: 1rem; margin-bottom: 1.5rem; align-items: center; }
+        .cart-item-image { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; }
+        .cart-item h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .qty-btn { width: 24px; height: 24px; border: 1px solid #ddd; background: #fff; cursor: pointer; border-radius: 3px; }
+        .cart-footer { padding: 1.5rem; border-top: 1px solid #eee; background: #fafafa; }
+        .cart-total { display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+        .checkout-btn { width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: background 0.3s; }
+        .checkout-btn:hover { background: var(--accent); }
+        .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* NUEVO: FORMULARIO DE CHECKOUT (MODAL) */
-        .checkout-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 11000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
-        .checkout-modal.active { opacity: 1; pointer-events: all; }
-        .checkout-content { background: var(--white); padding: 2.5rem; border-radius: 8px; max-width: 500px; width: 90%; position: relative; max-height: 90vh; overflow-y: auto; }
-        .checkout-content h2 { font-family: Georgia, serif; color: var(--primary); margin-bottom: 1.5rem; text-align: center; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; }
-        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; font-family: inherit; }
-        .payment-info { background: #f9f9f9; padding: 1rem; border-radius: 4px; margin-top: 1rem; font-size: 0.9rem; display: none; border: 1px solid var(--accent); }
+        /* Checkout Form Modal */
+        .checkout-content { 
+            background: var(--white); padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--primary); }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+        .payment-info { background: #f0fdf4; padding: 1rem; border: 1px solid #bbf7d0; border-radius: 4px; margin-top: 1rem; display: none; color: #166534; font-size: 0.9rem; }
         .payment-info.show { display: block; }
-        .btn-whatsapp { width: 100%; padding: 1rem; background: #25D366; color: white; border: none; font-size: 1rem; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-whatsapp:hover { background: #128C7E; }
-        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 2rem; cursor: pointer; }
+        .btn-whatsapp { width: 100%; padding: 1rem; background: #25D366; color: white; border: none; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
-        /* Sección Hero */
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
-        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/gZWu46S.jpeg'); background-size: cover; background-position: center; filter: brightness(0.7); }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(45,62,47,0.6) 0%, rgba(26,26,26,0.4) 100%); }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--white); max-width: 1000px; padding: 2rem; }
-        .hero h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 300; letter-spacing: 8px; margin-bottom: 2rem; font-family: Georgia, serif; line-height: 1.2; }
-        .hero-description { font-size: 1.3rem; margin-bottom: 3rem; }
-        .hero-cta { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
-        .btn-primary, .btn-secondary { padding: 1.2rem 3rem; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s ease; }
-        .btn-primary { background: var(--accent); color: var(--white); border: 2px solid var(--accent); }
-        .btn-secondary { background: transparent; color: var(--white); border: 2px solid var(--white); }
+        /* Modal de Zoom de Imagen */
+        .image-zoom-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            max-width: 90%; max-height: 90%;
+        }
+        .image-zoom-content img {
+            max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .zoom-close {
+            position: absolute; top: -40px; right: 0; color: white; font-size: 2rem; background: none; border: none; cursor: pointer;
+        }
 
-        /* Historia */
-        .story { background: var(--light); }
-        .story-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+        /* --- HERO --- */
+        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; padding-top: 60px; }
+        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/gZWu46S.jpeg'); background-size: cover; background-position: center; filter: brightness(0.65); }
+        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--white); max-width: 800px; padding: 2rem; }
+        .hero-subtitle { font-size: 1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem; opacity: 0.9; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 300; letter-spacing: 2px; margin-bottom: 1.5rem; font-family: Georgia, serif; line-height: 1.1; }
+        .hero-description { font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; }
+        .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn-primary, .btn-secondary { padding: 1rem 2.5rem; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s ease; border-radius: 2px; }
+        .btn-primary { background: var(--accent); color: var(--white); border: 1px solid var(--accent); }
+        .btn-primary:hover { background: transparent; border-color: var(--white); }
+        .btn-secondary { background: transparent; color: var(--white); border: 1px solid var(--white); }
+        .btn-secondary:hover { background: var(--white); color: var(--primary); }
+
+        /* --- HISTORIA --- */
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; }
+        .story-image-container { height: 100%; min-height: 400px; }
         .story-image-container img { width: 100%; height: 100%; object-fit: cover; }
-        .story-content { display: flex; flex-direction: column; justify-content: center; padding: 8rem 6rem; background: var(--white); }
-        .story-label { font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; font-weight: 600; }
-        .story h2 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: var(--primary); margin-bottom: 2rem; font-family: Georgia, serif; }
-        .story p { font-size: 1.15rem; line-height: 1.9; margin-bottom: 1.5rem; }
-        .story-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 3rem; padding-top: 3rem; border-top: 1px solid rgba(45,62,47,0.1); }
-        .stat-number { font-size: 2rem; font-weight: 300; color: var(--accent); font-family: Georgia, serif; display: block; margin-bottom: 1rem; }
-        .stat-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; display: block; }
+        .story-content { display: flex; flex-direction: column; justify-content: center; padding: 5rem; background: var(--white); }
+        .story-label { color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 1rem; }
+        .story h2 { font-size: clamp(2rem, 4vw, 3rem); color: var(--primary); margin-bottom: 1.5rem; font-family: Georgia, serif; font-weight: 300; }
+        .story-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #eee; }
+        .stat-number { font-size: 1.8rem; color: var(--accent); font-family: Georgia, serif; display: block; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Productos */
-        .products { padding: 8rem 5%; }
-        .section-header { text-align: center; max-width: 800px; margin: 0 auto 6rem; }
-        .section-label { font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; font-weight: 600; }
-        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: var(--primary); margin-bottom: 1.5rem; font-family: Georgia, serif; }
-        .products-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem; }
-        .product-card { background: var(--light); transition: all 0.5s ease; }
-        .product-image { width: 100%; height: 450px; position: relative; overflow: hidden; }
-        .product-slider { display: flex; width: 400%; height: 100%; transition: transform 0.5s ease; }
-        .product-slide { width: 25%; height: 100%; flex-shrink: 0; }
-        .product-slide img { width: 100%; height: 100%; object-fit: contain; background: var(--white); }
-        .slider-dots { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
-        .slider-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 2px solid var(--primary); cursor: pointer; transition: all 0.3s; }
-        .slider-dot.active { background: var(--accent); border-color: var(--accent); }
-        .slider-arrows { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 10px; transform: translateY(-50%); z-index: 10; }
-        .slider-arrow { width: 40px; height: 40px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
-        .product-badge { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--accent); color: var(--white); padding: 0.5rem 1.5rem; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; z-index: 5; }
-        .product-info { padding: 3rem; }
-        .product-info h3 { font-size: 2rem; color: var(--primary); margin-bottom: 1rem; font-family: Georgia, serif; }
-        .product-price { font-size: 2rem; color: var(--accent); font-weight: 600; margin-bottom: 1.5rem; font-family: Georgia, serif; }
-        .product-features { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-        .feature-tag { padding: 0.5rem 1rem; background: var(--white); border: 1px solid rgba(45,62,47,0.2); font-size: 0.8rem; text-transform: uppercase; }
-        .product-cta { width: 100%; padding: 1rem 2.5rem; background: var(--primary); color: var(--white); border: none; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+        /* --- PRODUCTOS --- */
+        .products { padding: 6rem 5%; background: #fbfbfb; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 4rem; }
+        .section-label { color: var(--accent); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .section-title { font-size: 2.5rem; color: var(--primary); font-family: Georgia, serif; margin-bottom: 1rem; }
+        
+        /* Grid de productos responsivo */
+        .products-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 2rem; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        .product-card { 
+            background: var(--white); 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: var(--shadow); /* Sombra suave en lugar de fondo gris */
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+
+        /* Slider e Imágenes */
+        .product-image { 
+            width: 100%; 
+            height: 400px; /* Altura fija */
+            position: relative; 
+            background: #fff;
+            overflow: hidden;
+            cursor: zoom-in; /* Indica que se puede hacer zoom */
+        }
+        
+        .product-slider { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease; }
+        .product-slide { width: 100%; height: 100%; flex-shrink: 0; }
+        
+        .product-slide img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            /* EL TRUCO DE RECORTE: Mueve la imagen para ocultar el título superior */
+            object-position: center 30%; 
+        }
+
+        /* Ajuste específico para el slider activo */
+        .product-slider-wrapper { width: 100%; overflow: hidden; height: 100%; position: relative; }
+
+        .slider-arrows { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 10px; transform: translateY(-50%); pointer-events: none; }
+        .slider-arrow { width: 35px; height: 35px; background: rgba(255,255,255,0.9); border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; pointer-events: all; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .product-badge { position: absolute; top: 15px; right: 15px; background: var(--primary); color: var(--white); padding: 5px 12px; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; z-index: 5; }
+
+        /* Información del producto */
+        .product-info { padding: 2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .product-info h3 { font-size: 1.5rem; color: var(--primary); margin-bottom: 0.5rem; font-family: Georgia, serif; }
+        .product-price { font-size: 1.4rem; color: var(--accent); font-weight: 600; margin-bottom: 1rem; font-family: Georgia, serif; }
+        .product-description { font-size: 0.95rem; color: #666; margin-bottom: 1.5rem; line-height: 1.6; }
+        
+        .product-features { display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .feature-tag { padding: 4px 10px; background: #f4f4f4; color: var(--dark); border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .product-cta { width: 100%; padding: 1rem; background: var(--primary); color: var(--white); border: none; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; margin-top: auto; }
         .product-cta:hover { background: var(--accent); }
-        .product-cta:disabled { background: #95a5a6; cursor: not-allowed; }
-        .coming-soon-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, #f5f5f0 0%, #e8e8e0 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--primary); }
-        .coming-soon-placeholder span { font-size: 4rem; font-weight: 300; opacity: 0.3; font-family: Georgia, serif; }
+        .product-cta:disabled { background: #e0e0e0; color: #999; cursor: default; }
 
-        /* NUEVO: FONDO UNIFICADO PARA CONTACTO Y FOOTER */
+        /* Coming Soon Placeholder */
+        .coming-soon-placeholder { width: 100%; height: 100%; background: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; }
+        .coming-soon-placeholder span { font-size: 3rem; font-family: Georgia, serif; }
+
+        /* --- FONDO FINAL (Contacto + Footer) --- */
         .fondo-final {
             position: relative;
             background-image: url('https://imgur.com/pYk1UxL.jpeg');
@@ -117,67 +199,110 @@
             color: var(--white);
         }
         .fondo-final::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(26, 26, 26, 0.8); /* Filtro oscuro */
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(20, 20, 20, 0.85); /* Oscurecido para legibilidad */
             z-index: 0;
         }
-        .contact, footer {
-            position: relative;
-            z-index: 1;
-            background: transparent; /* Importante para que se vea la imagen */
+        .contact, footer { position: relative; z-index: 1; background: transparent; }
+
+        .contact { padding: 6rem 5%; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .contact h2 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; margin-bottom: 1.5rem; font-family: Georgia, serif; }
+        .contact p { font-size: 1.2rem; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; }
+        .contact-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+        .contact-btn { padding: 1rem 2.5rem; background: var(--accent); color: var(--white); text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; border: 1px solid var(--accent); transition: 0.3s; }
+        .contact-btn:hover { background: transparent; border-color: var(--white); }
+        .contact-btn.outline { background: transparent; border: 1px solid var(--white); }
+        .contact-btn.outline:hover { background: var(--white); color: var(--primary); }
+
+        footer { padding: 4rem 5%; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 3rem; }
+        .footer-brand h3 { font-family: Georgia, serif; font-size: 1.5rem; letter-spacing: 4px; margin-bottom: 1rem; }
+        .footer-links h4 { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--accent); }
+        .footer-links ul { list-style: none; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem; display: block; margin-bottom: 0.8rem; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--white); }
+        .footer-bottom { max-width: 1200px; margin: 3rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.8rem; opacity: 0.5; }
+
+        /* --- MEDIA QUERIES (Celular) --- */
+        @media (max-width: 992px) {
+            .story-grid { grid-template-columns: 1fr; }
+            .story-image-container { height: 400px; min-height: auto; }
+            .story-content { padding: 3rem 2rem; }
+            .footer-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
         }
 
-        .contact { padding: 10rem 5%; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .contact h2 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; margin-bottom: 2rem; font-family: Georgia, serif; }
-        .contact p { font-size: 1.3rem; margin-bottom: 4rem; }
-        .contact-buttons { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
-        .contact-btn { padding: 1.5rem 3rem; background: var(--accent); color: var(--white); text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; border: 2px solid var(--accent); }
-        .contact-btn.outline { background: transparent; border: 2px solid var(--white); }
-
-        footer { padding: 6rem 5% 4rem; }
-        .footer-content { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; }
-        .footer-brand h3 { font-family: Georgia, serif; font-size: 1.8rem; letter-spacing: 6px; margin-bottom: 1rem; }
-        .footer-links h4 { font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--accent); }
-        .footer-links ul { list-style: none; }
-        .footer-links a { color: var(--white); text-decoration: none; opacity: 0.7; display: block; margin-bottom: 0.8rem; }
-        .footer-bottom { max-width: 1400px; margin: 3rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; opacity: 0.6; }
-
-        @media (max-width: 1024px) { .story-grid, .products-grid { grid-template-columns: 1fr; } .footer-content { grid-template-columns: 1fr; } .story-content { padding: 4rem 2rem; } }
-        @media (max-width: 768px) { nav ul { display: none; } .product-image { height: 350px; } }
+        @media (max-width: 768px) {
+            nav { padding: 1rem 5%; }
+            .menu-toggle { display: flex; }
+            .nav-links { 
+                position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); 
+                flex-direction: column; gap: 0; max-height: 0; overflow: hidden; transition: 0.4s ease;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            }
+            .nav-links.active { max-height: 300px; }
+            .nav-links li { width: 100%; }
+            .nav-links a { display: block; padding: 1.5rem; color: var(--primary); border-bottom: 1px solid #f5f5f5; width: 100%; text-align: center; }
+            
+            .hero { justify-content: center; text-align: center; padding: 0 1rem; }
+            .hero h1 { font-size: 3rem; }
+            
+            .products-grid { grid-template-columns: 1fr; max-width: 400px; }
+            .product-image { height: 380px; } /* Buen tamaño para ver el producto en celular */
+            .product-info { padding: 1.5rem; }
+            
+            .contact-buttons { flex-direction: column; width: 100%; }
+            .contact-btn { width: 100%; text-align: center; }
+            
+            .cart-sidebar { width: 85%; }
+        }
     </style>
 </head>
 <body>
+
     <nav id="navbar">
         <div class="container">
             <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">REGENAHS</div>
             <div class="nav-right">
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#historia">Historia</a></li>
-                    <li><a href="#productos">Productos</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                <div class="menu-toggle" id="mobileMenuBtn">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#inicio" onclick="closeMenu()">Inicio</a></li>
+                    <li><a href="#historia" onclick="closeMenu()">Historia</a></li>
+                    <li><a href="#productos" onclick="closeMenu()">Productos</a></li>
+                    <li><a href="#contacto" onclick="closeMenu()">Contacto</a></li>
                 </ul>
-                <div class="cart-icon-container" id="cartIcon">🛒<span class="cart-badge" id="cartBadge">0</span></div>
+                <div class="cart-icon-container" id="cartIcon">
+                    🛒<span class="cart-badge" id="cartBadge">0</span>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="cart-overlay" id="cartOverlay"></div>
     <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header"><h2>Tu Carrito</h2><button class="cart-close" id="cartClose">×</button></div>
-        <div class="cart-items" id="cartItems"><div class="cart-empty"><p>Tu carrito está vacío</p></div></div>
+        <div class="cart-header">
+            <h2>Tu Carrito</h2>
+            <button class="cart-close" id="cartClose">×</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty"><p>Tu carrito está vacío</p></div>
+        </div>
         <div class="cart-footer">
-            <div class="cart-total"><span>Total:</span><span id="cartTotal">$0</span></div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0</span>
+            </div>
             <button class="checkout-btn" id="checkoutBtn" disabled>Finalizar Compra</button>
         </div>
     </div>
 
     <div class="checkout-modal" id="checkoutModal">
         <div class="checkout-content">
-            <button class="modal-close" id="closeCheckout">×</button>
-            <h2>Finalizar Pedido</h2>
+            <button class="modal-close" style="position:absolute; top:15px; right:15px; background:none; border:none; font-size:1.5rem; cursor:pointer;" id="closeCheckout">×</button>
+            <h2 style="text-align: center; margin-bottom: 1.5rem; font-family: Georgia, serif;">Finalizar Pedido</h2>
             <form id="orderForm">
                 <div class="form-group">
                     <label>Nombre Completo</label>
@@ -198,13 +323,23 @@
 
                 <div id="bankDetails" class="payment-info">
                     <p><strong>Datos para transferir:</strong></p>
-                    <p>Alias: regenahs.oliva</p>
-                    <p>CBU: 0000003100084249686690</p>
-                    <p><small>* Enviaremos los datos también por WhatsApp.</small></p>
+                    <p>Alias: <strong>regenahs.oliva</strong></p>
+                    <p>CBU: <strong>0000003100084249686690</strong></p>
+                    <p style="margin-top:5px; font-size:0.8rem;">* Enviaremos estos datos también por WhatsApp.</p>
                 </div>
 
-                <button type="submit" class="btn-whatsapp">Enviar Pedido por WhatsApp</button>
+                <button type="submit" class="btn-whatsapp">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    Confirmar en WhatsApp
+                </button>
             </form>
+        </div>
+    </div>
+
+    <div class="image-zoom-modal" id="imageZoomModal" onclick="closeZoom()">
+        <div class="image-zoom-content">
+            <button class="zoom-close" onclick="closeZoom()">×</button>
+            <img id="zoomedImage" src="" alt="Zoom Producto">
         </div>
     </div>
 
@@ -241,41 +376,52 @@
 
     <section class="products" id="productos">
         <div class="section-header">
-            <p class="section-label">Productos</p>
-            <h2 class="section-title">Calidad premium en cada formato</h2>
-            <p>Nuestro aceite de oliva extra virgen está disponible en presentaciones diseñadas para acompañarte.</p>
+            <p class="section-label">Nuestros Productos</p>
+            <h2 class="section-title">Calidad premium</h2>
+            <p>Presentaciones diseñadas para acompañarte en cada comida.</p>
         </div>
+        
         <div class="products-grid">
             <div class="product-card">
                 <div class="product-image" id="slider1">
-                    <div class="product-slider">
-                        <div class="product-slide"><img src="https://i.imgur.com/Vft5kaS.jpeg" alt="Botella 500ml"></div>
-                        <div class="product-slide"><img src="https://i.imgur.com/H0kqE92.jpeg" alt="Tubo diseño"></div>
-                        <div class="product-slide"><img src="https://i.imgur.com/JDAQJek.jpeg" alt="Botella con mano"></div>
-                        <div class="product-slide"><img src="https://i.imgur.com/ayIpd3p.jpeg" alt="Packaging premium"></div>
+                    <div class="product-slider-wrapper">
+                        <div class="product-slider">
+                            <div class="product-slide">
+                                <img src="https://imgur.com/5cW5eRO.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                            </div>
+                            <div class="product-slide">
+                                <img src="https://imgur.com/9XKeuSa.jpeg" alt="Botella Detalle" onclick="openZoom(this.src)">
+                            </div>
+                            <div class="product-slide">
+                                <img src="https://imgur.com/5cW5eRO.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="slider-arrows">
                         <button class="slider-arrow" onclick="changeSlide('slider1', -1)">❮</button>
                         <button class="slider-arrow" onclick="changeSlide('slider1', 1)">❯</button>
                     </div>
-                    <div class="slider-dots">
-                        <span class="slider-dot active" onclick="goToSlide('slider1', 0)"></span>
-                        <span class="slider-dot" onclick="goToSlide('slider1', 1)"></span>
-                        <span class="slider-dot" onclick="goToSlide('slider1', 2)"></span>
-                        <span class="slider-dot" onclick="goToSlide('slider1', 3)"></span>
-                    </div>
-                    <div class="product-badge">Premium</div>
+                    <div class="product-badge">Destacado</div>
                 </div>
+                
                 <div class="product-info">
                     <h3>Botella 500ml</h3>
                     <div class="product-price">$37.000</div>
-                    <p>Diseño estético y sofisticado, ideal para tu mesa diaria. Packaging premium.</p>
+                    <p class="product-description">Diseño estético y sofisticado. Ideal para realzar el sabor de tus comidas diarias con un toque premium.</p>
+                    
                     <div class="product-features">
                         <span class="feature-tag">Extra Virgen</span>
                         <span class="feature-tag">Prensado en Frío</span>
-                        <span class="feature-tag">Sustentable</span>
                     </div>
-                    <button class="product-cta add-to-cart" data-id="500ml" data-name="Botella 500ml" data-price="37000" data-image="https://i.imgur.com/Vft5kaS.jpeg">Agregar al Carrito</button>
+                    
+                    <button class="product-cta add-to-cart" 
+                        data-id="500ml" 
+                        data-name="Botella 500ml" 
+                        data-price="37000" 
+                        data-image="https://imgur.com/5cW5eRO.jpeg">
+                        Agregar al Carrito
+                    </button>
                 </div>
             </div>
 
@@ -283,19 +429,20 @@
                 <div class="product-image">
                     <div class="coming-soon-placeholder">
                         <span>3L</span>
-                        <p>Coming Soon</p>
+                        <p style="margin-top:10px; letter-spacing:2px; text-transform:uppercase; font-size:0.8rem;">Próximamente</p>
                     </div>
-                    <div class="product-badge">Próximamente</div>
+                    <div class="product-badge" style="background:#999;">Coming Soon</div>
                 </div>
                 <div class="product-info">
                     <h3>Bidón 3 litros</h3>
-                    <div class="product-price" style="color: var(--primary);">Llega Pronto</div>
-                    <p>Sistema innovador de reposición para que recargues tus botellas.</p>
+                    <div class="product-price" style="color: var(--primary); font-size:1.2rem;">Llega Pronto</div>
+                    <p class="product-description">Sistema innovador de reposición para recargar tus botellas de forma económica y sustentable.</p>
+                    
                     <div class="product-features">
-                        <span class="feature-tag">Sustentable</span>
                         <span class="feature-tag">Económico</span>
-                        <span class="feature-tag">Eco-Friendly</span>
+                        <span class="feature-tag">Sustentable</span>
                     </div>
+                    
                     <button class="product-cta" disabled>Próximamente</button>
                 </div>
             </div>
@@ -315,37 +462,73 @@
 
         <footer>
             <div class="footer-content">
-                <div class="footer-brand"><h3>REGENAHS</h3><p>Aceite de oliva extra virgen de San Rafael, Mendoza. Tradición familiar y calidad premium.</p></div>
-                <div class="footer-links"><h4>Enlaces</h4><ul><li><a href="#inicio">Inicio</a></li><li><a href="#historia">Historia</a></li><li><a href="#productos">Productos</a></li><li><a href="#contacto">Contacto</a></li></ul></div>
-                <div class="footer-links"><h4>Contacto</h4><ul><li><a href="https://wa.me/5491169614456" target="_blank">WhatsApp</a></li><li><a href="https://instagram.com/regenahs.aceite" target="_blank">Instagram</a></li><li><a href="mailto:hola@regenahs.com">Email</a></li></ul></div>
+                <div class="footer-brand">
+                    <h3>REGENAHS</h3>
+                    <p style="opacity:0.8; font-size:0.9rem;">Aceite de oliva extra virgen de San Rafael, Mendoza. Tradición familiar y calidad premium.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Navegación</h4>
+                    <ul>
+                        <li><a href="#inicio">Inicio</a></li>
+                        <li><a href="#historia">Historia</a></li>
+                        <li><a href="#productos">Productos</a></li>
+                        <li><a href="#contacto">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/5491169614456" target="_blank">WhatsApp</a></li>
+                        <li><a href="https://instagram.com/regenahs.aceite" target="_blank">Instagram</a></li>
+                        <li><a href="mailto:hola@regenahs.com">Email</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="footer-bottom"><p>© 2024 REGENAHS - Aceite de Oliva Extra Virgen | San Rafael, Mendoza</p></div>
+            <div class="footer-bottom">
+                <p>© 2024 REGENAHS - Aceite de Oliva Extra Virgen</p>
+            </div>
         </footer>
     </div>
 
     <script>
         let cart = [];
         const sliderStates = { slider1: 0 };
-        const totalSlides = 4;
+        const totalSlides = 3; // Ajustado a la cantidad de imagenes
 
+        // Lógica del Slider
         function changeSlide(sliderId, direction) {
             const slider = document.querySelector(`#${sliderId} .product-slider`);
-            const dots = document.querySelectorAll(`#${sliderId} .slider-dot`);
             sliderStates[sliderId] = (sliderStates[sliderId] + direction + totalSlides) % totalSlides;
-            slider.style.transform = `translateX(-${sliderStates[sliderId] * 25}%)`;
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === sliderStates[sliderId]));
+            slider.style.transform = `translateX(-${sliderStates[sliderId] * 100}%)`;
+        }
+        // Auto-slide
+        setInterval(() => { changeSlide('slider1', 1); }, 5000);
+
+        // Lógica del Zoom (Lightbox)
+        const zoomModal = document.getElementById('imageZoomModal');
+        const zoomedImage = document.getElementById('zoomedImage');
+
+        function openZoom(src) {
+            zoomedImage.src = src;
+            zoomModal.classList.add('active');
+        }
+        function closeZoom() {
+            zoomModal.classList.remove('active');
         }
 
-        function goToSlide(sliderId, index) {
-            const slider = document.querySelector(`#${sliderId} .product-slider`);
-            const dots = document.querySelectorAll(`#${sliderId} .slider-dot`);
-            sliderStates[sliderId] = index;
-            slider.style.transform = `translateX(-${index * 25}%)`;
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        // Lógica del Menú Hamburguesa
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        function closeMenu() {
+            navLinks.classList.remove('active');
         }
 
-        setInterval(() => { changeSlide('slider1', 1); }, 4000);
-
+        // Lógica Carrito y Checkout
         const cartIcon = document.getElementById('cartIcon');
         const cartSidebar = document.getElementById('cartSidebar');
         const cartOverlay = document.getElementById('cartOverlay');
@@ -356,7 +539,6 @@
         const checkoutBtn = document.getElementById('checkoutBtn');
         const navbar = document.getElementById('navbar');
         
-        // Elementos del Modal
         const checkoutModal = document.getElementById('checkoutModal');
         const closeCheckout = document.getElementById('closeCheckout');
         const orderForm = document.getElementById('orderForm');
@@ -377,7 +559,7 @@
                             <div style="color: var(--accent); font-weight: 600;">$${item.price.toLocaleString()}</div>
                             <div class="cart-item-quantity">
                                 <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">−</button>
-                                <span>${item.quantity}</span>
+                                <span style="font-size:0.9rem; font-weight:600; padding:0 5px;">${item.quantity}</span>
                                 <button class="qty-btn" onclick="updateQuantity('${item.id}', 1)">+</button>
                             </div>
                         </div>
@@ -405,7 +587,6 @@
         function openCart() { cartSidebar.classList.add('active'); cartOverlay.classList.add('active'); }
         function closeCart() { cartSidebar.classList.remove('active'); cartOverlay.classList.remove('active'); }
         
-        // Funciones del Modal
         checkoutBtn.addEventListener('click', () => {
             closeCart();
             checkoutModal.classList.add('active');
@@ -451,8 +632,8 @@
         cartOverlay.addEventListener('click', closeCart);
 
         document.querySelectorAll('.add-to-cart').forEach(btn => btn.addEventListener('click', function() { addToCart(this.dataset.id, this.dataset.name, parseInt(this.dataset.price), this.dataset.image); }));
-        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.pageYOffset > 100));
-        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); }));
+        window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.pageYOffset > 50));
+        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); if(window.innerWidth < 768) closeMenu(); }));
     </script>
 </body>
 </html>
