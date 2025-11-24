@@ -21,9 +21,10 @@
             color: var(--dark); 
             background: var(--white); 
             line-height: 1.6; 
-            /* AJUSTE CLAVE PARA COMPATIBILIDAD EN MÓVILES (iOS/Android): Elimina el borde blanco horizontal */
+            /* AJUSTE CRÍTICO: Elimina el scroll horizontal en Android/iOS */
             overflow-x: hidden; 
             width: 100%;
+            min-width: 320px; /* Asegura un ancho mínimo razonable */
         }
         
         /* --- NAVEGACIÓN RESPONSIVE --- */
@@ -49,7 +50,6 @@
         nav.scrolled .bar { background-color: var(--primary); }
 
         /* --- CARRITO & MODALES (Compatibilidad Universal) --- */
-        /* Uso de 'vh' para altura completa y 'vw' para ancho, asegurando consistencia */
         .cart-overlay, .checkout-modal, .image-zoom-modal { 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
             background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
@@ -58,7 +58,11 @@
         .cart-overlay.active, .checkout-modal.active, .image-zoom-modal.active { opacity: 1; pointer-events: all; }
         
         .cart-sidebar { 
-            position: fixed; top: 0; right: -100%; width: 90%; max-width: 400px; height: 100vh; 
+            position: fixed; top: 0; right: -100%; 
+            /* AJUSTE CRÍTICO: Usar 100% de ancho en móvil, limitado a 400px en escritorio */
+            width: 100%; 
+            max-width: 400px; 
+            height: 100vh; 
             background: var(--white); z-index: 10000; transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1); 
             display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
         }
@@ -91,12 +95,20 @@
         }
 
         /* --- SECCIONES PRINCIPALES (Uso de clamp para tipografía fluida) --- */
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; }
+        .hero { 
+            height: 100vh; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            /* AJUSTE: Mantiene el ancho total sin desbordarse */
+            width: 100vw; 
+        }
         .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/gZWu46S.jpeg'); background-size: cover; background-position: center; filter: brightness(0.65); }
         .hero-content { position: relative; z-index: 2; text-align: center; color: var(--white); max-width: 800px; padding: 2rem; }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 300; letter-spacing: 2px; margin-bottom: 1.5rem; font-family: Georgia, serif; line-height: 1.1; }
         
-        .story-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; }
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 80vh; width: 100%; }
         .story-image-container { height: 100%; min-height: 400px; }
         .story-image-container img { width: 100%; height: 100%; object-fit: cover; }
         .story-content { display: flex; flex-direction: column; justify-content: center; padding: 5rem; background: var(--white); }
@@ -130,9 +142,7 @@
         .product-cta, .btn-primary, .btn-secondary, .contact-btn { 
             padding: 1rem 2.5rem; 
             font-size: 0.9rem; 
-            /* Se asegura que los botones sean fáciles de pulsar en móvil */
         }
-
 
         /* --- MEDIA QUERIES (BREAKPOINTS) --- */
         @media (max-width: 992px) {
@@ -154,7 +164,8 @@
                 flex-direction: column; gap: 0; max-height: 0; overflow: hidden; transition: 0.4s ease;
                 box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             }
-            .nav-links.active { max-height: 300px; }
+            /* AJUSTE CRÍTICO: Usa 'auto' para la altura del menú en móviles */
+            .nav-links.active { max-height: 300px; overflow-y: auto; } 
             .nav-links a { display: block; padding: 1.2rem; color: var(--primary); border-bottom: 1px solid #f5f5f5; width: 100%; text-align: center; }
             
             .hero h1 { font-size: clamp(2rem, 9vw, 3rem); }
@@ -163,6 +174,9 @@
             
             .contact-buttons { flex-direction: column; width: 100%; }
             .contact-btn { width: 100%; text-align: center; }
+
+            /* Asegura que el contenido en móvil use el padding del 5% */
+            .story-grid, .products, .contact, footer { padding-left: 5%; padding-right: 5%; }
         }
         /* Fin de Media Queries */
 
