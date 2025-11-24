@@ -83,12 +83,14 @@
         .btn-whatsapp { width: 100%; padding: 1rem; background: #25D366; color: white; border: none; font-weight: 600; border-radius: 4px; cursor: pointer; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px; }
 
         /* Modal de Zoom de Imagen */
+        .image-zoom-modal { z-index: 10001; }
         .image-zoom-content {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             max-width: 95%; max-height: 95%; width: auto; height: auto;
         }
         .image-zoom-content img {
-            max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); object-fit: contain;
+            max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            object-fit: contain; /* Asegura que la imagen completa se vea en el zoom */
         }
         .zoom-close {
             position: absolute; top: -40px; right: 0; color: white; font-size: 2rem; background: none; border: none; cursor: pointer;
@@ -384,13 +386,16 @@
                     <div class="product-slider-wrapper">
                         <div class="product-slider">
                             <div class="product-slide">
-                                <img src="https://imgur.com/E4NVAv7.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                                <img src="https://imgur.com/zToToK9.jpeg" alt="Botella Principal" onclick="openZoom(this.src)">
                             </div>
                             <div class="product-slide">
-                                <img src="https://imgur.com/9XKeuSa.jpeg" alt="Botella Detalle" onclick="openZoom(this.src)">
+                                <img src="https://imgur.com/luYHSqA.jpeg" alt="Botella Detalle 1" onclick="openZoom(this.src)">
                             </div>
                             <div class="product-slide">
-                                <img src="https://imgur.com/E4NVAv7.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                                <img src="https://imgur.com/7KwtmUR.jpeg" alt="Botella Detalle 2" onclick="openZoom(this.src)">
+                            </div>
+                             <div class="product-slide">
+                                <img src="https://imgur.com/zToToK9.jpeg" alt="Botella Principal (Repetida)" onclick="openZoom(this.src)">
                             </div>
                         </div>
                     </div>
@@ -416,7 +421,7 @@
                         data-id="500ml" 
                         data-name="Botella 500ml" 
                         data-price="37000" 
-                        data-image="https://imgur.com/E4NVAv7.jpeg">
+                        data-image="https://imgur.com/zToToK9.jpeg">
                         Agregar al Carrito
                     </button>
                 </div>
@@ -489,13 +494,15 @@
 
     <script>
         let cart = [];
-        const sliderStates = { slider1: 0 };
-        const totalSlides = 3; 
+        // Se actualiza a 4 porque ahora hay 3 imágenes únicas + 1 repetida para el loop.
+        const totalSlides = 4; 
+        const sliderStates = { slider1: 0 }; 
 
         // Lógica del Slider
         function changeSlide(sliderId, direction) {
             const slider = document.querySelector(`#${sliderId} .product-slider`);
-            sliderStates[sliderId] = (sliderStates[sliderId] + direction + totalSlides) % totalSlides;
+            // Mantenemos el índice entre 0 y totalSlides - 1
+            sliderStates[sliderId] = (sliderStates[sliderId] + direction + totalSlides) % totalSlides; 
             slider.style.transform = `translateX(-${sliderStates[sliderId] * 100}%)`;
         }
         // Auto-slide
