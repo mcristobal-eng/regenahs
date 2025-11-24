@@ -1,25 +1,3 @@
-/* CSS global */
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-            color: var(--dark); 
-            background: var(--white); 
-            line-height: 1.6; 
-            /* 1. Cambio clave: Asegurar que nada se desborde lateralmente */
-            overflow-x: hidden; 
-            width: 100%; /* Aseguramos que el body ocupe exactamente el 100% */
-        }
-
-        /* 2. Revisión de Modales */
-        .checkout-modal { 
-            padding: 0 1rem; 
-            /* Asegura que el contenido del modal no se expanda al 100% + padding en móviles */
-        }
-        .checkout-content { 
-            /* ... (estilos anteriores) ... */
-            width: 95%; /* Limitamos al 95% para dejar un margen visual en móviles pequeños */
-            max-width: 500px;
-            /* ... (estilos anteriores) ... */
-        }
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -103,7 +81,7 @@
         .checkout-modal { padding: 0 1rem; }
         .checkout-content { 
             background: var(--white); padding: 2rem; border-radius: 8px; 
-            width: 95%; /* AJUSTE: Usar 95% del ancho para dejar margen en móvil */
+            width: 95%; /* Ajustado para asegurar margen en móvil */
             max-width: 500px; /* Limite en desktop */
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
@@ -567,11 +545,68 @@
         // Lógica del Slider
         function changeSlide(sliderId, direction) {
             const slider = document.querySelector(`#${sliderId} .product-slider`);
-            sliderStates[sliderId] = (sliderStates[sliderId] + direction + totalSlides) % totalSlides; 
-            slider.style.transform = `translateX(-${sliderStates[sliderId] * 100}%)`;
+            // Se resta uno porque el último slide es una copia del primero para el efecto de loop
+            const effectiveTotalSlides = totalSlides - 1;
+            
+            // Calcula el nuevo índice (0 a 2 para las imágenes únicas)
+            let newIndex = sliderStates[sliderId] + direction;
+
+            if (newIndex >= totalSlides) {
+                // Si va de la imagen 3 (índice 2) a la siguiente (índice 3 - copia), se mueve y luego salta al índice 0
+                newIndex = totalSlides - 1; // Mover al índice 3 (copia)
+                slider.style.transition = 'transform 0.5s ease';
+                slider.style.transform = `translateX(-${newIndex * 100}%)`;
+                
+                // Esperar a que termine la transición para saltar al inicio sin transición
+                setTimeout(() => {
+                    slider.style.transition = 'none';
+                    sliderStates[sliderId] = 0;
+                    slider.style.transform = `translateX(0%)`;
+                }, 500);
+            } else if (newIndex < 0) {
+                // Si va de la imagen 1 (índice 0) a la anterior, salta a la copia (índice 3) y luego se mueve al real 2
+                slider.style.transition = 'none';
+                slider.style.transform = `translateX(-${(totalSlides - 1) * 100}%)`; // Salta al índice 3 (copia)
+                
+                // Esperar un ciclo de renderizado antes de empezar la transición
+                setTimeout(() => {
+                    slider.style.transition = 'transform 0.5s ease';
+                    sliderStates[sliderId] = effectiveTotalSlides - 1; // El real es el índice 2
+                    slider.style.transform = `translateX(-${sliderStates[sliderId] * 100}%)`;
+                }, 20); // 20ms es suficiente para un renderizado
+            } else {
+                // Movimiento normal
+                slider.style.transition = 'transform 0.5s ease';
+                sliderStates[sliderId] = newIndex;
+                slider.style.transform = `translateX(-${sliderStates[sliderId] * 100}%)`;
+            }
         }
+        
         // Auto-slide
-        setInterval(() => { changeSlide('slider1', 1); }, 5000);
+        let autoSlideInterval = setInterval(() => { 
+            // La lógica de auto-slide debe usar un índice temporal para manejar el loop
+            const slider = document.querySelector(`#slider1 .product-slider`);
+            let currentIndex = sliderStates['slider1'];
+
+            // Si estamos en la última imagen real (índice 2), el siguiente es el índice 3 (la copia)
+            if (currentIndex === totalSlides - 2) { 
+                slider.style.transition = 'transform 0.5s ease';
+                slider.style.transform = `translateX(-${(totalSlides - 1) * 100}%)`;
+                
+                setTimeout(() => {
+                    slider.style.transition = 'none';
+                    sliderStates['slider1'] = 0;
+                    slider.style.transform = `translateX(0%)`;
+                }, 500);
+            } else {
+                // Mover a la siguiente imagen (0 -> 1 -> 2)
+                slider.style.transition = 'transform 0.5s ease';
+                sliderStates['slider1'] = (currentIndex + 1) % (totalSlides - 1);
+                slider.style.transform = `translateX(-${sliderStates['slider1'] * 100}%)`;
+            }
+
+        }, 5000);
+
 
         // Lógica del Zoom (Lightbox)
         const zoomModal = document.getElementById('imageZoomModal');
@@ -626,7 +661,7 @@
                         <img src="${item.image}" alt="${item.name}" class="cart-item-image">
                         <div class="cart-item-details">
                             <h3>${item.name}</h3>
-                            <div style="color: var(--accent); font-weight: 600;">$${item.price.toLocaleString()}</div>
+                            <div style="color: var(--accent); font-weight: 600;">$${item.price.toLocaleString('es-AR')}</div>
                             <div class="cart-item-quantity">
                                 <button class="qty-btn" onclick="updateQuantity('${item.id}', -1)">−</button>
                                 <span style="font-size:0.9rem; font-weight:600; padding:0 5px;">${item.quantity}</span>
@@ -638,7 +673,7 @@
                 `).join('');
                 checkoutBtn.disabled = false;
             }
-            cartTotal.textContent = '$' + cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString();
+            cartTotal.textContent = '$' + cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toLocaleString('es-AR');
         }
 
         function addToCart(id, name, price, image) {
@@ -656,6 +691,10 @@
         }
         function openCart() { cartSidebar.classList.add('active'); cartOverlay.classList.add('active'); }
         function closeCart() { cartSidebar.classList.remove('active'); cartOverlay.classList.remove('active'); }
+        
+        cartIcon.addEventListener('click', openCart);
+        cartClose.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
         
         checkoutBtn.addEventListener('click', () => {
             closeCart();
@@ -695,11 +734,11 @@
             message += `*Detalle del Pedido:*%0A`;
             
             cart.forEach(item => {
-                message += `- ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toLocaleString()})%0A`;
+                message += `- ${item.quantity}x ${item.name} ($${(item.price * item.quantity).toLocaleString('es-AR')})%0A`;
             });
             
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            message += `%0A*TOTAL: $${total.toLocaleString()}*`;
+            message += `%0A*TOTAL: $${total.toLocaleString('es-AR')}*`;
 
             if (payment === "Mercado Pago / Transferencia") {
                 message += `%0A%0A*👉 Ya realicé la transferencia. Adjunto el comprobante por este medio.*`;
@@ -712,13 +751,17 @@
             updateCart();
         });
 
-        cartIcon.addEventListener('click', openCart);
-        cartClose.addEventListener('click', closeCart);
-        cartOverlay.addEventListener('click', closeCart);
-
-        document.querySelectorAll('.add-to-cart').forEach(btn => btn.addEventListener('click', function() { addToCart(this.dataset.id, this.dataset.name, parseInt(this.dataset.price), this.dataset.image); }));
+        document.querySelectorAll('.add-to-cart').forEach(btn => btn.addEventListener('click', function() { 
+            addToCart(this.dataset.id, this.dataset.name, parseInt(this.dataset.price), this.dataset.image); 
+        }));
+        
         window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.pageYOffset > 50));
-        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { e.preventDefault(); document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); if(window.innerWidth < 768) closeMenu(); }));
+        
+        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', function(e) { 
+            e.preventDefault(); 
+            document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' }); 
+            if(window.innerWidth < 768) closeMenu(); 
+        }));
     </script>
 </body>
 </html>
