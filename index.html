@@ -70,8 +70,9 @@
         .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         /* Checkout Form Modal */
+        .checkout-modal { padding: 0 1rem; } /* Agregamos padding para mejor vista en móvil */
         .checkout-content { 
-            background: var(--white); padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; 
+            background: var(--white); padding: 2rem; border-radius: 8px; max-width: 500px; width: 100%; /* 100% de width para móvil, se limita por max-width */
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
@@ -85,6 +86,7 @@
             width: 100%; padding: 1rem; background: #25D366; color: white; border: none; font-weight: 600; 
             border-radius: 4px; cursor: pointer; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: 1px; 
             display: flex; align-items: center; justify-content: center; gap: 8px; 
+            text-align: center; /* Asegura centrado de texto en móvil */
         }
 
         /* Modal de Zoom de Imagen */
@@ -95,16 +97,33 @@
         }
         .image-zoom-content img {
             max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-            object-fit: contain; /* Asegura que la imagen completa se vea en el zoom */
+            object-fit: contain; 
         }
         .zoom-close {
             position: absolute; top: -40px; right: 0; color: white; font-size: 2rem; background: none; border: none; cursor: pointer;
         }
 
         /* --- HERO --- */
-        .hero { height: 100vh; position: relative; display: flex; align-items: center; justify-content: center; padding-top: 60px; }
-        .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://i.imgur.com/gZWu46S.jpeg'); background-size: cover; background-position: center; filter: brightness(0.65); }
-        .hero-content { position: relative; z-index: 2; text-align: center; color: var(--white); max-width: 800px; padding: 2rem; }
+        .hero { 
+            height: 100vh; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            /* Se elimina padding-top: 60px para centrado perfecto */
+        }
+        .hero-bg { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: url('https://i.imgur.com/gZWu46S.jpeg'); 
+            background-size: cover; 
+            background-position: center; 
+            filter: brightness(0.65); 
+        }
+        .hero-content { 
+            position: relative; z-index: 2; text-align: center; color: var(--white); 
+            max-width: 800px; 
+            padding: 2rem; /* Mantener padding para evitar tocar bordes */
+        }
         .hero-subtitle { font-size: 1rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem; opacity: 0.9; }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 300; letter-spacing: 2px; margin-bottom: 1.5rem; font-family: Georgia, serif; line-height: 1.1; }
         .hero-description { font-size: 1.1rem; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto; opacity: 0.9; }
@@ -155,9 +174,9 @@
         /* Slider e Imágenes */
         .product-image { 
             width: 100%; 
-            height: 450px; /* Altura fija para pc */
+            height: 450px; 
             position: relative; 
-            background: #fff; /* Fondo blanco para que se integre con la foto recortada */
+            background: #fff; 
             overflow: hidden;
             cursor: zoom-in;
         }
@@ -168,8 +187,8 @@
         .product-slide img { 
             width: 100%; 
             height: 100%; 
-            object-fit: contain; /* CLAVE: Muestra la foto entera sin recortes */
-            padding: 20px; /* Un poco de aire alrededor */
+            object-fit: contain; 
+            padding: 20px; 
         }
 
         .product-slider-wrapper { width: 100%; overflow: hidden; height: 100%; position: relative; }
@@ -227,12 +246,15 @@
         .footer-links a:hover { color: var(--white); }
         .footer-bottom { max-width: 1200px; margin: 3rem auto 0; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.8rem; opacity: 0.5; }
 
-        /* --- MEDIA QUERIES (Celular) --- */
+        /* --- MEDIA QUERIES (Celular/Tablet) --- */
         @media (max-width: 992px) {
             .story-grid { grid-template-columns: 1fr; }
             .story-image-container { height: 400px; min-height: auto; }
             .story-content { padding: 3rem 2rem; }
             .footer-content { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+            
+            .contact { padding: 4rem 5%; }
+            .contact p { font-size: 1rem; }
         }
 
         @media (max-width: 768px) {
@@ -247,11 +269,12 @@
             .nav-links li { width: 100%; }
             .nav-links a { display: block; padding: 1.5rem; color: var(--primary); border-bottom: 1px solid #f5f5f5; width: 100%; text-align: center; }
             
-            .hero { justify-content: center; text-align: center; padding: 0 1rem; }
-            .hero h1 { font-size: 3rem; }
+            .hero-content { padding: 1.5rem; } /* Más compacto en móvil */
+            .hero h1 { font-size: clamp(2rem, 9vw, 3rem); } /* Ajuste más agresivo en el h1 */
+            .hero-description { font-size: 1rem; }
             
             .products-grid { grid-template-columns: 1fr; max-width: 400px; }
-            .product-image { height: 380px; } /* Buen tamaño para celular */
+            .product-image { height: 380px; } 
             .product-info { padding: 1.5rem; }
             
             .contact-buttons { flex-direction: column; width: 100%; }
@@ -614,6 +637,7 @@
             const method = document.getElementById('paymentMethod').value;
             const bankDetails = document.getElementById('bankDetails');
 
+            // Lógica para mostrar detalles de transferencia y cambiar el texto del botón
             if(method === "Mercado Pago / Transferencia") {
                 bankDetails.classList.add('show');
                 // Cambiar el texto del botón a "Enviar Comprobante"
@@ -631,7 +655,7 @@
         orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('customerName').value;
-            const email = document.getElementById('customerEmail').value; // Capturamos el email
+            const email = document.getElementById('customerEmail').value; 
             const address = document.getElementById('customerAddress').value;
             const payment = document.getElementById('paymentMethod').value;
             
