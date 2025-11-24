@@ -10,7 +10,7 @@
             --primary: #2d3e2f; 
             --accent: #c4a676; 
             --dark: #1a1a1a; 
-            --light: #f9f8f6; /* Un tono más cálido, menos gris */
+            --light: #f9f8f6; 
             --white: #ffffff; 
             --shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
@@ -85,10 +85,10 @@
         /* Modal de Zoom de Imagen */
         .image-zoom-content {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            max-width: 90%; max-height: 90%;
+            max-width: 95%; max-height: 95%; width: auto; height: auto;
         }
         .image-zoom-content img {
-            max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            max-width: 100%; max-height: 90vh; border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); object-fit: contain;
         }
         .zoom-close {
             position: absolute; top: -40px; right: 0; color: white; font-size: 2rem; background: none; border: none; cursor: pointer;
@@ -138,7 +138,7 @@
             background: var(--white); 
             border-radius: 8px; 
             overflow: hidden; 
-            box-shadow: var(--shadow); /* Sombra suave en lugar de fondo gris */
+            box-shadow: var(--shadow); 
             display: flex;
             flex-direction: column;
             transition: transform 0.3s ease;
@@ -148,25 +148,23 @@
         /* Slider e Imágenes */
         .product-image { 
             width: 100%; 
-            height: 400px; /* Altura fija */
+            height: 450px; /* Altura fija para pc */
             position: relative; 
-            background: #fff;
+            background: #fff; /* Fondo blanco para que se integre con la foto recortada */
             overflow: hidden;
-            cursor: zoom-in; /* Indica que se puede hacer zoom */
+            cursor: zoom-in;
         }
         
         .product-slider { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease; }
-        .product-slide { width: 100%; height: 100%; flex-shrink: 0; }
+        .product-slide { width: 100%; height: 100%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;}
         
         .product-slide img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; 
-            /* EL TRUCO DE RECORTE: Mueve la imagen para ocultar el título superior */
-            object-position: center 30%; 
+            object-fit: contain; /* CLAVE: Muestra la foto entera sin recortes */
+            padding: 20px; /* Un poco de aire alrededor */
         }
 
-        /* Ajuste específico para el slider activo */
         .product-slider-wrapper { width: 100%; overflow: hidden; height: 100%; position: relative; }
 
         .slider-arrows { position: absolute; top: 50%; width: 100%; display: flex; justify-content: space-between; padding: 0 10px; transform: translateY(-50%); pointer-events: none; }
@@ -186,7 +184,6 @@
         .product-cta:hover { background: var(--accent); }
         .product-cta:disabled { background: #e0e0e0; color: #999; cursor: default; }
 
-        /* Coming Soon Placeholder */
         .coming-soon-placeholder { width: 100%; height: 100%; background: #f0f0f0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; }
         .coming-soon-placeholder span { font-size: 3rem; font-family: Georgia, serif; }
 
@@ -200,7 +197,7 @@
         }
         .fondo-final::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(20, 20, 20, 0.85); /* Oscurecido para legibilidad */
+            background: rgba(20, 20, 20, 0.85); 
             z-index: 0;
         }
         .contact, footer { position: relative; z-index: 1; background: transparent; }
@@ -247,7 +244,7 @@
             .hero h1 { font-size: 3rem; }
             
             .products-grid { grid-template-columns: 1fr; max-width: 400px; }
-            .product-image { height: 380px; } /* Buen tamaño para ver el producto en celular */
+            .product-image { height: 380px; } /* Buen tamaño para celular */
             .product-info { padding: 1.5rem; }
             
             .contact-buttons { flex-direction: column; width: 100%; }
@@ -387,13 +384,13 @@
                     <div class="product-slider-wrapper">
                         <div class="product-slider">
                             <div class="product-slide">
-                                <img src="https://imgur.com/5cW5eRO.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                                <img src="https://imgur.com/E4NVAv7.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
                             </div>
                             <div class="product-slide">
                                 <img src="https://imgur.com/9XKeuSa.jpeg" alt="Botella Detalle" onclick="openZoom(this.src)">
                             </div>
                             <div class="product-slide">
-                                <img src="https://imgur.com/5cW5eRO.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
+                                <img src="https://imgur.com/E4NVAv7.jpeg" alt="Botella Frente" onclick="openZoom(this.src)">
                             </div>
                         </div>
                     </div>
@@ -419,7 +416,7 @@
                         data-id="500ml" 
                         data-name="Botella 500ml" 
                         data-price="37000" 
-                        data-image="https://imgur.com/5cW5eRO.jpeg">
+                        data-image="https://imgur.com/E4NVAv7.jpeg">
                         Agregar al Carrito
                     </button>
                 </div>
@@ -493,7 +490,7 @@
     <script>
         let cart = [];
         const sliderStates = { slider1: 0 };
-        const totalSlides = 3; // Ajustado a la cantidad de imagenes
+        const totalSlides = 3; 
 
         // Lógica del Slider
         function changeSlide(sliderId, direction) {
