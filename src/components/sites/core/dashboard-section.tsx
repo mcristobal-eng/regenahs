@@ -1,11 +1,12 @@
 "use client";
 
 import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "motion/react";
-import { FileText, HandCoins, Home, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
+import { FileText, HandCoins, Home, MessageCircle, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
-import { BACKGROUND_TONE, SectionBackdrop, type SectionBackground } from "./section-backgrounds";
+import { ChatDemo } from "./chat-demo";
+import { AuroraBackdrop } from "./section-backgrounds";
 import { Reveal, asset } from "./shared";
 
 const NAV = [
@@ -128,7 +129,7 @@ function Dashboard() {
   return (
     <div ref={ref} className="relative flex h-full overflow-hidden rounded-[28px] bg-hueso text-azul shadow-[0_40px_80px_-30px_rgb(0_0_60/0.5)] ring-1 ring-noche/5">
       {/* Sidebar */}
-      <aside className="hidden w-48 shrink-0 flex-col border-r border-border p-4 md:flex">
+      <aside className="hidden w-44 shrink-0 flex-col border-r border-border p-4 xl:flex">
         <div className="flex items-center gap-2 px-2 pb-5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={SOCIO_AVATAR} alt="" width={24} height={24} className="size-6 rounded-full" />
@@ -180,7 +181,7 @@ function Dashboard() {
             ))}
           </div>
 
-          <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
             <div className="min-w-0 rounded-2xl border border-border bg-white/60 p-3.5">
               <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-xs">
                 <span className="font-medium">Evolución mensual</span>
@@ -299,26 +300,91 @@ function Dashboard() {
   );
 }
 
-export function DashboardSection({ background = "cielo", id = "panel" }: { background?: SectionBackground; id?: string }) {
-  const light = BACKGROUND_TONE[background] === "light";
+function WhatsAppMark() {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
+    <span className="flex size-7 items-center justify-center rounded-full bg-[#25d366] text-white">
+      <MessageCircle className="size-4" aria-hidden />
+    </span>
+  );
+}
+
+function MercadoPagoMark() {
+  return (
+    <span className="flex size-7 items-center justify-center rounded-full bg-[#00b1ea] text-white">
+      <HandCoins className="size-4" aria-hidden />
+    </span>
+  );
+}
+
+function ImgMark({ src }: { src: string }) {
+  return (
+    <span className="flex size-7 items-center justify-center rounded-full bg-white">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" width={16} height={16} className="size-4" />
+    </span>
+  );
+}
+
+const INTEGRATIONS = [
+  { name: "WhatsApp", note: "Facturás y anotás cobros desde el chat", mark: <WhatsAppMark /> },
+  { name: "Mercado Pago", note: "Cada cobro entra solo", mark: <MercadoPagoMark /> },
+  { name: "ChatGPT", note: "Consultás tus números", mark: <ImgMark src={asset("/brand/openai.svg")} /> },
+  { name: "Claude", note: "Consultás tus números", mark: <ImgMark src={asset("/brand/claude.svg")} /> },
+];
+
+export function DashboardSection() {
+  return (
+    <section id="panel" aria-labelledby="panel-title" className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
       <div className="relative isolate overflow-hidden rounded-[28px] px-4 py-16 sm:px-8 sm:py-24">
-        <SectionBackdrop variant={background} />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center">
-          <Reveal onScroll className={light ? "text-center text-white" : "text-center text-azul"}>
-            <h2 id={`${id}-title`} className={cn("font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance", light && "[text-shadow:0_2px_24px_rgb(0_40_90/0.25)]")}>
-              <span className="block">Y en la compu,</span>
-              <span className="block">todo a la vista</span>
+        <AuroraBackdrop />
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center">
+          <Reveal onScroll className="text-center text-white">
+            <h2 id="panel-title" className="font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
+              <span className="block">Lo de todos los días en un chat,</span>
+              <span className="block">y todo a la vista en tu panel</span>
             </h2>
-            <p className={cn("mx-auto mt-4 max-w-2xl text-base text-pretty sm:text-lg", light ? "text-white/90 [text-shadow:0_1px_12px_rgb(0_40_90/0.3)]" : "text-azul/80")}>
-              Lo que le contás a SOCIO por WhatsApp queda ordenado en tu panel. Conectás Mercado Pago y cada cobro entra solo. Y con ChatGPT o Claude le preguntás por tus números sin buscar nada.
+            <p className="mx-auto mt-4 max-w-2xl text-base text-pretty text-white/85 sm:text-lg">
+              Le escribís a SOCIO por WhatsApp y todo queda ordenado en tu panel. Conectás Mercado Pago para que cada cobro entre solo, y ChatGPT o Claude para preguntarle por tus números.
             </p>
-            <span aria-hidden className={cn("mx-auto mt-8 block h-px w-48", light ? "bg-white/70" : "bg-azul/40")} />
           </Reveal>
-          <Reveal onScroll delay={0.1} className="mt-10 w-full lg:h-[560px]">
-            <Dashboard />
+
+          <Reveal onScroll delay={0.05} className="mt-8 w-full">
+            <p className="text-center font-mono text-[11px] tracking-[0.18em] text-white/60 uppercase">Se conecta con</p>
+            <ul className="mx-auto mt-3 grid max-w-4xl grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-2.5">
+              {INTEGRATIONS.map((it) => (
+                <li key={it.name} className="flex items-center gap-2.5 rounded-full bg-white/10 py-1.5 pr-4 pl-1.5 text-white ring-1 ring-white/20 backdrop-blur-md">
+                  {it.mark}
+                  <span className="leading-tight">
+                    <span className="block text-sm font-semibold">{it.name}</span>
+                    <span className="hidden text-[11px] text-white/65 sm:block">{it.note}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </Reveal>
+
+          <div className="mt-10 grid w-full gap-4 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-stretch">
+            <Reveal onScroll delay={0.1} className="flex flex-col">
+              <p className="mb-2 flex items-center gap-2 px-1 text-sm font-medium text-white">
+                <WhatsAppMark />
+                En WhatsApp
+              </p>
+              <div className="h-[520px] lg:h-[560px]">
+                <ChatDemo className="h-full" />
+              </div>
+            </Reveal>
+            <Reveal onScroll delay={0.18} className="flex min-w-0 flex-col">
+              <p className="mb-2 flex items-center gap-2 px-1 text-sm font-medium text-white">
+                <span className="flex size-7 items-center justify-center rounded-full bg-white text-azul">
+                  <Home className="size-4" aria-hidden />
+                </span>
+                En tu panel web
+              </p>
+              <div className="lg:h-[560px]">
+                <Dashboard />
+              </div>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>
