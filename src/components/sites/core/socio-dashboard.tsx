@@ -5,7 +5,6 @@ import { ArrowUp, Check, FileText, Home, Plus, Receipt, Search, Send, Sparkles, 
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
-import { MercadoPagoLogo } from "./brand-logos";
 import { asset } from "./shared";
 
 type View = "Inicio" | "Facturas" | "Cobranza" | "Clientes" | "Costos";
@@ -47,11 +46,6 @@ const MONTHS = [
   { m: "oct", f: 2000, c: 652 },
 ];
 
-const TOASTS = [
-  { title: "Entró $32.000 de Lucía", body: "Mercado Pago · ¿La facturamos?" },
-  { title: "Entró $45.000 de García", body: "Factura 0001-128 · cobrada" },
-  { title: "Entró $18.500 de Diego", body: "Transferencia · anotado" },
-];
 
 const SUGGESTIONS = ["¿Quién me debe?", "¿Cuánto facturé en octubre?", "¿Me acerco al tope?"];
 
@@ -111,7 +105,7 @@ export function SocioDashboard({ active }: { active?: boolean }) {
   const [reminded, setReminded] = useState<number[]>([]);
   const [hoverMonth, setHoverMonth] = useState<number | null>(null);
   const [newOpen, setNewOpen] = useState(false);
-  const [toast, setToast] = useState<{ title: string; body: string; mp?: boolean } | null>(null);
+  const [toast, setToast] = useState<{ title: string; body: string } | null>(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<{ q: string; a: string } | null>(null);
   const [touched, setTouched] = useState(false);
@@ -122,26 +116,10 @@ export function SocioDashboard({ active }: { active?: boolean }) {
   const deben = debts.reduce((s, i) => s + i.amount, 0);
   const costos = COSTS.reduce((s, c) => s + c.amount, 0);
 
-  const notify = (t: { title: string; body: string; mp?: boolean }) => {
+  const notify = (t: { title: string; body: string }) => {
     setToast(t);
     window.setTimeout(() => setToast((cur) => (cur === t ? null : cur)), 2600);
   };
-
-  // Mercado Pago cobros keep popping in while the panel is on screen.
-  useEffect(() => {
-    if (!live || reduced) return;
-    let i = 0;
-    const show = () => {
-      notify({ ...TOASTS[i % TOASTS.length], mp: true });
-      i += 1;
-    };
-    const first = window.setTimeout(show, 1800);
-    const id = window.setInterval(show, 6500);
-    return () => {
-      window.clearTimeout(first);
-      window.clearInterval(id);
-    };
-  }, [live, reduced]);
 
   const ask = (q: string) => {
     const t = q.toLowerCase();
@@ -678,8 +656,8 @@ export function SocioDashboard({ active }: { active?: boolean }) {
             exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
           >
-            <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-xl", toast.mp ? "bg-[#e6f7fd] text-[#00b1ea]" : "bg-hielo text-azul")}>
-              {toast.mp ? <MercadoPagoLogo className="size-6" /> : <Check className="size-4" aria-hidden />}
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-hielo text-azul">
+              <Check className="size-4" aria-hidden />
             </span>
             <span className="min-w-0 text-sm leading-tight">
               <span className="block truncate font-semibold">{toast.title}</span>
