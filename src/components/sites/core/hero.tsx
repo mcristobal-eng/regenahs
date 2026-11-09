@@ -17,17 +17,14 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Reveal, asset } from "./shared";
+import { SOCIO_PHOTOS } from "./assets";
+import { Reveal } from "./shared";
 import { WhatsAppPill } from "./whatsapp-pill";
 
-const VIDEO_FILTER = "[filter:brightness(1.08)_saturate(1.12)_sepia(0.18)_hue-rotate(-6deg)]";
-
-function HeroVideo() {
+/** Fondo del hero: foto con un zoom lento y el mismo recorte con bordes redondeados al hacer scroll. */
+function HeroBackground() {
   const ref = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const inset = useRef(24);
-  const [load, setLoad] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const p = useTransform(scrollYProgress, [0, 0.35], [0, 1], { clamp: true });
@@ -46,49 +43,23 @@ function HeroVideo() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  useEffect(() => {
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-    if (prefersReduced || saveData) return;
-    const start = () => setLoad(true);
-    if (document.readyState === "complete") {
-      start();
-      return;
-    }
-    window.addEventListener("load", start, { once: true });
-    return () => window.removeEventListener("load", start);
-  }, []);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (load && video) {
-      video.load();
-      video.play().catch(() => {});
-    }
-  }, [load]);
-
   return (
     <div ref={ref} className="absolute inset-0 -z-10" aria-hidden>
       <motion.div
         className="absolute inset-0 overflow-hidden bg-core-ink will-change-[clip-path]"
         style={reduced ? undefined : { clipPath }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={asset("/video/hero-poster.jpg")} alt="" fetchPriority="high" className={cn("absolute inset-0 size-full object-cover", VIDEO_FILTER)} />
-        <video
-          ref={videoRef}
-          muted
-          loop
-          playsInline
-          preload="none"
-          onPlaying={() => setPlaying(true)}
-          className={cn("absolute inset-0 size-full object-cover transition-opacity duration-700", VIDEO_FILTER, playing ? "opacity-100" : "opacity-0")}
-        >
-          {load && <source media="(max-width: 767px)" src={asset("/video/hero-720.mp4")} type="video/mp4" />}
-          {load && <source src={asset("/video/hero-1080.mp4")} type="video/mp4" />}
-        </video>
-        <div className="absolute inset-0 bg-core-orange/15 mix-blend-soft-light" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/10 to-black/40" />
+        <motion.img
+          src={SOCIO_PHOTOS.hero}
+          alt=""
+          fetchPriority="high"
+          className="absolute inset-0 size-full object-cover object-[60%_40%]"
+          initial={reduced ? false : { scale: 1.08 }}
+          animate={reduced ? undefined : { scale: 1 }}
+          transition={{ duration: 8, ease: [0.22, 1, 0.36, 1] }}
+        />
+        <div className="absolute inset-0 bg-noche/30 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/55" />
       </motion.div>
     </div>
   );
@@ -134,7 +105,7 @@ function AgentTicker({ className }: { className?: string }) {
 export function Hero() {
   return (
     <section className="relative isolate flex min-h-svh flex-col items-center px-4 pt-20 pb-6 text-center text-white sm:pb-8">
-      <HeroVideo />
+      <HeroBackground />
       <div className="flex w-full flex-1 flex-col items-center justify-center pt-[4vh]">
         <Reveal delay={0.1}>
           <h1 className="max-w-6xl font-display text-[clamp(2.5rem,6vw,5.75rem)] leading-[1.02] font-semibold tracking-[-0.03em] [text-shadow:0_2px_24px_rgb(0_0_0/0.3)]">

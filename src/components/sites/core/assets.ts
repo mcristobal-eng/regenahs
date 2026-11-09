@@ -6,3 +6,11 @@ export const WHATSAPP_URL =
 export const CALENDLY_URL = "https://calendly.com/soysocio2026/30min";
 export const APP_URL = "https://soysocio.app";
 export const SOCIO_AVATAR = "/sites/socio/avatar.webp";
+
+/** Fotos de Unsplash (licencia Unsplash, uso comercial libre). Créditos en docs/research/socio/creditos-fotos.md. */
+export const SOCIO_PHOTOS = {
+  hero: "/sites/socio/fotos/hero.jpg",
+  audio: "/sites/socio/fotos/audio.jpg",
+  factura: "/sites/socio/fotos/factura.jpg",
+  cierre: "/sites/socio/fotos/cierre.jpg",
+};

@@ -1,4 +1,4 @@
-import { asset } from "./assets";
+import { SOCIO_PHOTOS } from "./assets";
 import { Reveal } from "./shared";
 import { WhatsAppPill } from "./whatsapp-pill";
 import { Wordmark } from "./wordmark";
@@ -9,7 +9,7 @@ export function Cierre() {
       <div className="relative isolate flex min-h-[min(88svh,860px)] flex-col items-center justify-center overflow-hidden rounded-[28px] px-6 py-20 text-center text-white">
         <div aria-hidden className="absolute inset-0 overflow-hidden rounded-[inherit] bg-muted">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={asset("/images/cierre/cta.jpg")} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
+          <img src={SOCIO_PHOTOS.cierre} alt="" loading="lazy" className="absolute inset-0 size-full object-cover" />
         </div>
         <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/15 to-black/45" />
         <div className="relative flex flex-col items-center">

@@ -29,7 +29,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode,
 import { cn } from "@/lib/utils";
 import { CardMedia } from "./card-media";
 import { ChatDemo, ChatHeading } from "./chat-demo";
-import { SOCIO_AVATAR } from "./assets";
+import { SOCIO_AVATAR, SOCIO_PHOTOS } from "./assets";
 import { Reveal, asset, clamp, smoothstep } from "./shared";
 
 /* ---------- Card 1: the voice message ---------- */
@@ -291,14 +291,14 @@ const CARDS: Card[] = [
     title: "Me mandás un audio",
     text: "O un mensaje, o una foto. Con tus palabras, como le hablarías a alguien de confianza.",
     side: "left",
-    image: asset("/images/producto/card1.jpg"),
+    image: SOCIO_PHOTOS.audio,
     content: <VoiceNote />,
   },
   {
     title: "Armo la factura",
     text: "Te la muestro antes de hacer nada: cliente, concepto y monto.",
     side: "right",
-    image: asset("/images/producto/campo-espigas.jpg"),
+    image: SOCIO_PHOTOS.factura,
     content: <EventLog />,
   },
   {
