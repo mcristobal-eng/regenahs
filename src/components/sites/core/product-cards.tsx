@@ -30,7 +30,8 @@ import { cn } from "@/lib/utils";
 import { CardMedia } from "./card-media";
 import { SOCIO_AVATAR, SOCIO_PHOTOS } from "./assets";
 import { ConnectedContent } from "./dashboard-section";
-import { Reveal, asset, clamp, smoothstep } from "./shared";
+import { SKY, SkyBackdrop } from "./sky-backdrop";
+import { Reveal, clamp, smoothstep } from "./shared";
 
 /* ---------- Card 1: the voice message ---------- */
 
@@ -305,7 +306,7 @@ const CARDS: Card[] = [
     title: "Con tu confirmación, la emito en ARCA",
     text: "Sin tu confirmación no se emite nada. Te llega el PDF por WhatsApp, listo para mandárselo a tu cliente.",
     side: "left",
-    image: asset("/images/producto/cielo.jpg"),
+    image: SKY,
     dither: false,
     drift: true,
     content: <PhoneAlerts />,
@@ -375,7 +376,7 @@ function StackCard({
       className={cn("absolute inset-0 origin-bottom overflow-hidden", RADIUS)}
       style={{ y, scale, opacity, top, left, right, bottom, borderRadius, zIndex: CARDS.length - index }}
     >
-      <CardMedia src={card.image} dither={card.dither} drift={card.drift} />
+      {card.image === SKY ? <SkyBackdrop /> : <CardMedia src={card.image} dither={card.dither} drift={card.drift} />}
       <div className="absolute inset-0 flex items-center justify-center p-6">{card.content}</div>
     </motion.div>
   );
@@ -491,7 +492,7 @@ function MobileList() {
           </Reveal>
           <Reveal onScroll delay={0.1}>
             <div className={cn("relative aspect-[4/5] w-full overflow-hidden sm:aspect-[16/11]", RADIUS)}>
-              <CardMedia src={card.image} dither={card.dither} drift={card.drift} />
+              {card.image === SKY ? <SkyBackdrop /> : <CardMedia src={card.image} dither={card.dither} drift={card.drift} />}
               <div className="absolute inset-0 flex items-center justify-center p-4">{card.content}</div>
             </div>
           </Reveal>
@@ -499,7 +500,7 @@ function MobileList() {
       ))}
       <Reveal onScroll>
         <div id="panel" className={cn("relative scroll-mt-8 overflow-hidden px-3 py-12 sm:px-6", RADIUS)}>
-          <CardMedia src={asset("/images/producto/cielo.jpg")} dither={false} drift />
+          <SkyBackdrop />
           <div className="relative">
             <ConnectedContent compact />
           </div>
