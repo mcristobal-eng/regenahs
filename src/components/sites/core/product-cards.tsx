@@ -453,7 +453,7 @@ function DesktopScene() {
         <motion.div ref={scene} className="sticky top-0 flex h-svh items-center will-change-[clip-path]" style={{ clipPath }}>
           <motion.div
             id="panel"
-            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-8 pt-6"
+            className={cn("absolute inset-0 z-20 flex items-center justify-center px-8 pt-4", active ? "pointer-events-auto" : "pointer-events-none")}
             style={{ opacity: reveal, y: revealY }}
           >
             <ConnectedContent active={active} />
