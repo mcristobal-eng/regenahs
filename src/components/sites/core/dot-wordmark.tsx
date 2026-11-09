@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { APP_URL, WHATSAPP_URL } from "./assets";
+import { APP_URL, CALENDLY_URL, WHATSAPP_URL } from "./assets";
 
 const LINK =
   "bg-[linear-gradient(currentColor,currentColor)] bg-[length:0%_1px] bg-left-bottom bg-no-repeat opacity-80 transition-[opacity,background-size] duration-300 hover:bg-[length:100%_1px] hover:opacity-100";
@@ -18,9 +18,10 @@ const COLUMNS: { title: string; links: { label: string; href: string; external?:
     ],
   },
   {
-    title: "Contacto",
+    title: "Contacto · ¿Necesitás ayuda?",
     links: [
-      { label: "WhatsApp", href: WHATSAPP_URL, external: true },
+      { label: "Escribinos por WhatsApp", href: WHATSAPP_URL, external: true },
+      { label: "Agendá una llamada", href: CALENDLY_URL, external: true },
       { label: "soysocio2026@gmail.com", href: "mailto:soysocio2026@gmail.com" },
     ],
   },
@@ -280,7 +281,7 @@ export function DotWordmark({
       className="relative isolate h-[560px] w-full overflow-hidden bg-noche text-hueso antialiased"
     >
       <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
-      <div className="relative z-[1] grid grid-cols-2 gap-x-6 gap-y-5 px-[clamp(20px,3.4vw,44px)] pt-[clamp(22px,3.4vw,40px)] font-mono text-[10.5px] leading-[1.75] tracking-[0.18em] uppercase md:grid-cols-[minmax(0,1.25fr)_repeat(3,minmax(0,1fr))]">
+      <div className="relative z-[1] grid grid-cols-2 gap-x-6 gap-y-5 px-[clamp(20px,3.4vw,44px)] pt-[clamp(22px,3.4vw,40px)] font-mono text-[10.5px] leading-[1.75] tracking-[0.18em] uppercase md:grid-cols-[minmax(0,1.1fr)_repeat(4,minmax(0,1fr))]">
         <p className="col-span-2 md:col-span-1">
           <strong className="block font-medium">SOCIO</strong>
           <span className="opacity-45">©2026 · Hecho en Argentina</span>

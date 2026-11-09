@@ -1,7 +1,6 @@
 import { AgentsSection } from "@/components/sites/core/agents-section";
 import { DotWordmark } from "@/components/sites/core/dot-wordmark";
 import { Faq } from "@/components/sites/core/faq";
-import { Footer } from "@/components/sites/core/footer";
 import { Hero } from "@/components/sites/core/hero";
 import { Navbar } from "@/components/sites/core/navbar";
 import { Pricing } from "@/components/sites/core/pricing";
@@ -20,7 +19,6 @@ export default function Home() {
         <Pricing />
         <Faq />
       </main>
-      <Footer />
       <DotWordmark />
     </>
   );
