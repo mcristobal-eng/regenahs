@@ -292,7 +292,7 @@ function CharacterSvg({
               <ShapePath shape={shape} fill="#000" />
             </clipPath>
           </defs>
-          <ellipse cx="100" cy="192" rx="62" ry="7" fill="#1d2a3a" opacity="0.14" filter={`url(#${id}-soft)`} />
+          <ellipse cx="100" cy="192" rx="62" ry="7" fill="#00006b" opacity="0.14" filter={`url(#${id}-soft)`} />
           <ShapePath shape={shape} fill={`url(#${id}-body)`} />
           <g clipPath={`url(#${id}-clip)`}>
             <ellipse cx="74" cy="56" rx="38" ry="22" fill="white" opacity="0.5" filter={`url(#${id}-soft)`} />
@@ -458,7 +458,7 @@ export function AgentCharacter(props: CharacterProps) {
       >
         <span
           aria-hidden
-          className="absolute left-1/2 h-[7%] w-[58%] -translate-x-1/2 rounded-[50%] bg-[#1d2a3a]/20 blur-md group-data-[gl=off]:hidden"
+          className="absolute left-1/2 h-[7%] w-[58%] -translate-x-1/2 rounded-[50%] bg-noche/20 blur-md group-data-[gl=off]:hidden"
           style={{ top: shadowTop }}
         />
         <canvas ref={canvasRef} aria-hidden className="relative size-full group-data-[gl=off]:hidden" />

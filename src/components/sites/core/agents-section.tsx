@@ -15,10 +15,10 @@ type Agent = {
 };
 
 const AGENTS: Agent[] = [
-  { name: "Facturá", shape: "squircle", color: "#00f790", at: { x: 19, y: 25 }, from: { x: -15, y: 0 }, size: 1, breathe: 3.2 },
-  { name: "Cobrá", shape: "hexagon", color: "#f83e00", at: { x: 80, y: 23 }, from: { x: 115, y: -5 }, size: 0.95, breathe: 3.8 },
-  { name: "¿Quién me debe?", shape: "pill", color: "#f8ebd7", at: { x: 23, y: 76 }, from: { x: -10, y: 115 }, size: 1.05, breathe: 3.5 },
-  { name: "Tu tope del monotributo", shape: "sphere", color: "#0093d8", at: { x: 78, y: 74 }, from: { x: 112, y: 112 }, size: 0.9, breathe: 4.1 },
+  { name: "Facturá", shape: "squircle", color: "#0000c8", at: { x: 19, y: 25 }, from: { x: -15, y: 0 }, size: 1, breathe: 3.2 },
+  { name: "Cobrá", shape: "hexagon", color: "#ffa800", at: { x: 80, y: 23 }, from: { x: 115, y: -5 }, size: 0.95, breathe: 3.8 },
+  { name: "¿Quién me debe?", shape: "pill", color: "#dce3ff", at: { x: 23, y: 76 }, from: { x: -10, y: 115 }, size: 1.05, breathe: 3.5 },
+  { name: "Tu tope del monotributo", shape: "sphere", color: "#00006b", at: { x: 78, y: 74 }, from: { x: 112, y: 112 }, size: 0.9, breathe: 4.1 },
 ];
 
 function FlyingAgent({

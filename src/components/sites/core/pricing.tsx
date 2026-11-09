@@ -120,7 +120,7 @@ export function Pricing() {
                 <div className={cn("flex h-full flex-col rounded-[28px] border p-6", plan.highlight ? "border-core-ink bg-core-ink text-white" : "border-border bg-background")}>
                   <div className="flex items-center gap-2">
                     <h3 className="font-display text-2xl font-semibold tracking-[-0.02em]">{plan.name}</h3>
-                    {plan.tag && <span className="rounded-full bg-core-orange px-2 py-0.5 text-xs font-medium text-white">{plan.tag}</span>}
+                    {plan.tag && <span className="rounded-full bg-core-orange px-2 py-0.5 text-xs font-medium text-noche">{plan.tag}</span>}
                   </div>
                   <p className={cn("mt-2 min-h-[4.5em] text-sm text-pretty", plan.highlight ? "text-white/70" : "text-muted-foreground")}>{plan.who}</p>
                   <p className="mt-6 flex items-baseline gap-1">
@@ -134,7 +134,7 @@ export function Pricing() {
                     rel="noopener noreferrer"
                     className={cn(
                       "mt-5 inline-flex h-10 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors",
-                      plan.highlight ? "bg-core-orange text-white hover:bg-core-orange/90" : "bg-primary text-primary-foreground hover:bg-primary/80",
+                      plan.highlight ? "bg-core-orange text-noche hover:brightness-105" : "bg-primary text-primary-foreground hover:bg-primary/80",
                     )}
                   >
                     {plan.cta.label}

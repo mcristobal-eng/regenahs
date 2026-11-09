@@ -22,10 +22,10 @@ type FooterAgent = {
 };
 
 const FOOTER_AGENTS: FooterAgent[] = [
-  { name: "Facturá", shape: "squircle", color: "#00f790", breathe: 3.2, x: 12, y: 47, size: 17, mx: 14, my: 57, msize: 27, rotation: -8, response: 0.9 },
-  { name: "Cobrá", shape: "hexagon", color: "#f83e00", breathe: 3.8, x: 37, y: 40, size: 14, mx: 39, my: 47, msize: 22, rotation: 10, response: 1.1 },
-  { name: "¿Quién me debe?", shape: "pill", color: "#f8ebd7", breathe: 3.5, x: 63, y: 52, size: 17, mx: 64, my: 62, msize: 27, rotation: -6, response: 1 },
-  { name: "Tu tope del monotributo", shape: "sphere", color: "#0093d8", breathe: 4.1, x: 88, y: 41, size: 13, mx: 88, my: 50, msize: 21, rotation: 0, response: 1.2 },
+  { name: "Facturá", shape: "squircle", color: "#0000c8", breathe: 3.2, x: 12, y: 47, size: 17, mx: 14, my: 57, msize: 27, rotation: -8, response: 0.9 },
+  { name: "Cobrá", shape: "hexagon", color: "#ffa800", breathe: 3.8, x: 37, y: 40, size: 14, mx: 39, my: 47, msize: 22, rotation: 10, response: 1.1 },
+  { name: "¿Quién me debe?", shape: "pill", color: "#dce3ff", breathe: 3.5, x: 63, y: 52, size: 17, mx: 64, my: 62, msize: 27, rotation: -6, response: 1 },
+  { name: "Tu tope del monotributo", shape: "sphere", color: "#00006b", breathe: 4.1, x: 88, y: 41, size: 13, mx: 88, my: 50, msize: 21, rotation: 0, response: 1.2 },
 ];
 
 /** Big wordmark with agents that spring away from a fine pointer. */
@@ -117,7 +117,7 @@ function FooterArt() {
     <div ref={ref} className="relative isolate aspect-[1.65] w-full overflow-visible select-none sm:aspect-[2.4]">
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-[-4%] left-1/2 z-[1] -translate-x-1/2 font-display text-[clamp(7rem,30vw,27rem)] leading-[0.8] font-bold tracking-[-0.06em] text-black select-none"
+        className="pointer-events-none absolute bottom-[-4%] left-1/2 z-[1] -translate-x-1/2 font-display text-[clamp(7rem,30vw,27rem)] leading-[0.8] font-bold tracking-[-0.06em] text-azul select-none"
       >
         socio
       </span>

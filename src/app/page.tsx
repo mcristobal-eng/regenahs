@@ -1,5 +1,6 @@
 import { AgentsSection } from "@/components/sites/core/agents-section";
 import { Cierre } from "@/components/sites/core/cierre";
+import { DotWordmark } from "@/components/sites/core/dot-wordmark";
 import { Faq } from "@/components/sites/core/faq";
 import { Footer } from "@/components/sites/core/footer";
 import { Hero } from "@/components/sites/core/hero";
@@ -22,6 +23,7 @@ export default function Home() {
         <Cierre />
       </main>
       <Footer />
+      <DotWordmark />
     </>
   );
 }

@@ -7,26 +7,26 @@ import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
 
 function Badge({ children }: { children: ReactNode }) {
-  return <span className="shrink-0 rounded-md bg-emerald-50 px-1.5 py-0.5 text-xs font-medium text-emerald-700">{children}</span>;
+  return <span className="shrink-0 rounded-md bg-hielo px-1.5 py-0.5 text-xs font-medium text-azul">{children}</span>;
 }
 function GhostAction({ children }: { children: ReactNode }) {
-  return <span className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full bg-black/[0.05] px-3.5 text-sm font-medium text-black">{children}</span>;
+  return <span className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full bg-noche/[0.05] px-3.5 text-sm font-medium text-noche">{children}</span>;
 }
 function SolidAction({ children }: { children: ReactNode }) {
-  return <span className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full bg-black px-3.5 text-sm font-medium text-white [&_svg]:size-4">{children}</span>;
+  return <span className="inline-flex h-9 flex-1 items-center justify-center gap-1.5 rounded-full bg-azul px-3.5 text-sm font-medium text-hueso [&_svg]:size-4">{children}</span>;
 }
 function Widget({ eyebrow, title, badge, children, actions }: { eyebrow: string; title: string; badge: string; children: ReactNode; actions?: ReactNode }) {
   return (
-    <div className="w-full rounded-2xl border border-black/10 bg-white p-4 text-black shadow-[0_6px_20px_-10px_rgb(0_0_0/0.18)]">
+    <div className="w-full rounded-2xl border border-noche/10 bg-white p-4 text-noche shadow-[0_6px_20px_-10px_rgb(0_0_0/0.18)]">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-xs text-black/50">{eyebrow}</p>
+          <p className="text-xs text-noche/50">{eyebrow}</p>
           <p className="mt-0.5 truncate text-[15px] font-semibold">{title}</p>
         </div>
         <Badge>{badge}</Badge>
       </div>
       <div className="mt-3">{children}</div>
-      {actions && <div className="mt-4 flex gap-2 border-t border-black/[0.06] pt-3">{actions}</div>}
+      {actions && <div className="mt-4 flex gap-2 border-t border-noche/[0.06] pt-3">{actions}</div>}
     </div>
   );
 }
@@ -35,7 +35,7 @@ function Rows({ rows }: { rows: [string, string][] }) {
     <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-sm">
       {rows.map(([k, v]) => (
         <Fragment key={k}>
-          <dt className="text-black/50">{k}</dt>
+          <dt className="text-noche/50">{k}</dt>
           <dd className="truncate text-right">{v}</dd>
         </Fragment>
       ))}
@@ -76,7 +76,7 @@ const CONVERSATIONS: { prompt: string; reply: string; widget: ReactNode }[] = [
     reply: "¿Querés que les mande un recordatorio?",
     widget: (
       <Widget eyebrow="Cuenta corriente" title="Te deben $120.000" badge="3 clientes" actions={<><GhostAction>Ver detalle</GhostAction><SolidAction><Send aria-hidden />Recordarles</SolidAction></>}>
-        <ul className="divide-y divide-black/[0.06] text-sm">
+        <ul className="divide-y divide-noche/[0.06] text-sm">
           {[
             ["García", "$70.000"],
             ["López", "$35.000"],
@@ -102,10 +102,10 @@ const CONVERSATIONS: { prompt: string; reply: string; widget: ReactNode }[] = [
             ["Cobrado", "$652 mil", "32 %"],
             ["Te deben", "$1,4 M", "4 facturas"],
           ].map(([label, value, note]) => (
-            <div key={label} className="rounded-xl bg-black/[0.03] p-2.5">
-              <p className="truncate text-xs text-black/50">{label}</p>
+            <div key={label} className="rounded-xl bg-noche/[0.03] p-2.5">
+              <p className="truncate text-xs text-noche/50">{label}</p>
               <p className="mt-0.5 text-lg leading-tight font-semibold">{value}</p>
-              <p className="text-xs text-emerald-700">{note}</p>
+              <p className="text-xs text-azul/70">{note}</p>
             </div>
           ))}
         </div>
@@ -183,15 +183,15 @@ export function ChatDemo({ playing, className }: { playing?: boolean; className?
     <div
       ref={ref}
       className={cn(
-        "flex h-full flex-col overflow-hidden rounded-[28px] bg-white font-[system-ui,-apple-system,'Segoe_UI',sans-serif] text-black shadow-[0_40px_80px_-30px_rgb(0_30_70/0.45)] ring-1 ring-black/5",
+        "flex h-full flex-col overflow-hidden rounded-[28px] bg-white font-[system-ui,-apple-system,'Segoe_UI',sans-serif] text-noche shadow-[0_40px_80px_-30px_rgb(0_30_70/0.45)] ring-1 ring-noche/5",
         className,
       )}
     >
-      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-black/[0.06] px-5">
+      <div className="flex h-12 shrink-0 items-center gap-2 border-b border-noche/[0.06] px-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={SOCIO_AVATAR} alt="" width={24} height={24} className="size-6 rounded-full" />
         <span className="text-sm font-medium">SOCIO</span>
-        <span className="text-xs text-black/50">en línea</span>
+        <span className="text-xs text-noche/50">en línea</span>
       </div>
       <div className="flex min-h-0 flex-1 flex-col justify-end overflow-hidden px-5 py-3">
         <AnimatePresence mode="wait" initial={false}>
@@ -212,7 +212,7 @@ export function ChatDemo({ playing, className }: { playing?: boolean; className?
             </motion.p>
             {shown >= 1 && (
               <motion.div className="flex flex-col gap-2.5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-                <span className="flex items-center gap-1.5 text-xs text-black/50">
+                <span className="flex items-center gap-1.5 text-xs text-noche/50">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={SOCIO_AVATAR} alt="" width={20} height={20} className="size-5 rounded-md" />
                   SOCIO
@@ -230,12 +230,12 @@ export function ChatDemo({ playing, className }: { playing?: boolean; className?
           </motion.div>
         </AnimatePresence>
       </div>
-      <div className="m-3 mt-0 flex h-12 shrink-0 items-center gap-2 rounded-full border border-black/10 bg-white px-2 shadow-[0_2px_8px_-4px_rgb(0_0_0/0.12)]">
-        <span className="flex size-8 items-center justify-center rounded-full text-black/50">
+      <div className="m-3 mt-0 flex h-12 shrink-0 items-center gap-2 rounded-full border border-noche/10 bg-white px-2 shadow-[0_2px_8px_-4px_rgb(0_0_0/0.12)]">
+        <span className="flex size-8 items-center justify-center rounded-full text-noche/50">
           <Plus className="size-4" aria-hidden />
         </span>
-        <span className="flex-1 truncate text-[15px] text-black/40">Mensaje</span>
-        <span className="flex size-8 items-center justify-center rounded-full bg-black text-white">
+        <span className="flex-1 truncate text-[15px] text-noche/40">Mensaje</span>
+        <span className="flex size-8 items-center justify-center rounded-full bg-azul text-hueso">
           <Mic className="size-4" aria-hidden />
         </span>
       </div>

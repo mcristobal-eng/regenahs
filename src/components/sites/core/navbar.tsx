@@ -22,14 +22,14 @@ function DemoButton({ size = "default", className, onClick }: { size?: "default"
       rel="noopener noreferrer"
       onClick={onClick}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-core-orange pr-2.5 pl-2 text-sm font-medium whitespace-nowrap text-white transition-all hover:bg-core-orange/90",
+        "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-core-orange pr-2.5 pl-2 text-sm font-medium whitespace-nowrap text-noche transition-all hover:brightness-105",
         size === "lg" ? "h-9" : "h-8",
         className,
       )}
     >
       <span className="relative flex size-1.5" aria-hidden>
-        <span className="absolute inline-flex size-full rounded-full bg-white opacity-75 motion-safe:animate-ping" />
-        <span className="relative inline-flex size-1.5 rounded-full bg-white" />
+        <span className="absolute inline-flex size-full rounded-full bg-noche opacity-60 motion-safe:animate-ping" />
+        <span className="relative inline-flex size-1.5 rounded-full bg-noche" />
       </span>
       WhatsApp
     </a>
