@@ -1,12 +1,14 @@
 "use client";
 
 import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "motion/react";
-import { FileText, HandCoins, Home, MessageCircle, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
+import { BellRing, FileText, HandCoins, Home, MessageCircle, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
 import { ChatDemo } from "./chat-demo";
-import { AuroraBackdrop } from "./section-backgrounds";
+import { CardMedia } from "./card-media";
+import { PhoneAlerts } from "./product-cards";
+import { AuroraBackdrop, RadialLinesBackdrop } from "./section-backgrounds";
 import { Reveal, asset } from "./shared";
 
 const NAV = [
@@ -332,11 +334,11 @@ const INTEGRATIONS = [
   { name: "Claude", note: "Consultás tus números", mark: <ImgMark src={asset("/brand/claude.svg")} /> },
 ];
 
-export function DashboardSection() {
+export function DashboardSection({ background = "lineas" }: { background?: "lineas" | "aurora" }) {
   return (
     <section id="panel" aria-labelledby="panel-title" className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
       <div className="relative isolate overflow-hidden rounded-[28px] px-4 py-16 sm:px-8 sm:py-24">
-        <AuroraBackdrop />
+        {background === "aurora" ? <AuroraBackdrop /> : <RadialLinesBackdrop />}
         <div className="relative mx-auto flex max-w-7xl flex-col items-center">
           <Reveal onScroll className="text-center text-white">
             <h2 id="panel-title" className="font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
@@ -362,6 +364,29 @@ export function DashboardSection() {
               ))}
             </ul>
           </Reveal>
+
+          <div className="mt-12 grid w-full items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:gap-10">
+            <Reveal onScroll className="text-white">
+              <p className="flex items-center gap-2 text-sm font-medium">
+                <span className="flex size-7 items-center justify-center rounded-full bg-white text-azul">
+                  <BellRing className="size-4" aria-hidden />
+                </span>
+                En tu celular
+              </p>
+              <h3 className="mt-4 font-display text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.03em] text-balance">
+                Con tu confirmación, la emito en ARCA
+              </h3>
+              <p className="mt-3 max-w-md text-base text-pretty text-white/80">
+                Sin tu confirmación no se emite nada. Te llega el PDF por WhatsApp, y te avisa al instante cuando entra un cobro de Mercado Pago o te acercás al tope.
+              </p>
+            </Reveal>
+            <Reveal onScroll delay={0.1}>
+              <div className="relative h-[340px] overflow-hidden rounded-[28px] sm:h-[380px]">
+                <CardMedia src={asset("/images/producto/cielo.jpg")} dither={false} drift />
+                <PhoneAlerts />
+              </div>
+            </Reveal>
+          </div>
 
           <div className="mt-10 grid w-full gap-4 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-stretch">
             <Reveal onScroll delay={0.1} className="flex flex-col">
