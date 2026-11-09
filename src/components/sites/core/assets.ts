@@ -12,5 +12,4 @@ export const SOCIO_PHOTOS = {
   hero: "/sites/socio/fotos/hero.jpg",
   audio: "/sites/socio/fotos/audio.jpg",
   factura: "/sites/socio/fotos/factura.jpg",
-  cierre: "/sites/socio/fotos/cierre.jpg",
 };
