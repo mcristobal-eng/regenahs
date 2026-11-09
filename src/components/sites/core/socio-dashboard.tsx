@@ -1,19 +1,22 @@
 "use client";
 
 import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "motion/react";
-import { ArrowUp, Check, FileText, Home, Plus, Receipt, Search, Send, Sparkles, Users, Wallet, X } from "lucide-react";
+import { ArrowUp, Check, ClipboardList, FileText, Home, Plus, Receipt, Search, Send, Sparkles, Users, Wallet, X } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
 import { asset } from "./shared";
 
-type View = "Inicio" | "Facturas" | "Cobranza" | "Clientes" | "Costos";
+type View = "Inicio" | "Facturas" | "Presupuestos" | "Cobranza" | "Clientes" | "Costos";
+type QuoteStatus = "Enviado" | "Aprobado" | "Facturado";
+type Quote = { id: number; who: string; what: string; amount: number; date: string; until: string; status: QuoteStatus };
 type Status = "Cobrada" | "Pendiente" | "Vencida";
 type Invoice = { id: number; who: string; what: string; status: Status; amount: number; date: string };
 
 const NAV: { icon: typeof Home; label: View }[] = [
   { icon: Home, label: "Inicio" },
   { icon: FileText, label: "Facturas" },
+  { icon: ClipboardList, label: "Presupuestos" },
   { icon: Wallet, label: "Cobranza" },
   { icon: Users, label: "Clientes" },
   { icon: Receipt, label: "Costos" },
@@ -28,6 +31,23 @@ const START: Invoice[] = [
   { id: 123, who: "Juan Pérez", what: "Arreglo de frenos", status: "Cobrada", amount: 272000, date: "8 oct" },
   { id: 122, who: "Gimnasio Fuerza", what: "Mantenimiento", status: "Vencida", amount: 208000, date: "2 oct" },
 ];
+
+const QUOTES: Quote[] = [
+  { id: 3, who: "José Fernández", what: "Cochera", amount: 20000, date: "06/11", until: "06/12", status: "Aprobado" },
+  { id: 2, who: "Lucía Gómez", what: "Pintura de living", amount: 120000, date: "28/10", until: "12/11", status: "Enviado" },
+  { id: 1, who: "Estudio Prado", what: "Service anual de flota", amount: 450000, date: "15/10", until: "15/11", status: "Enviado" },
+];
+
+const RECEIPTS = [
+  { id: 2, who: "Martina Gómez", what: "Cochera fija · octubre", amount: 95000, date: "27/10" },
+  { id: 1, who: "Logística Sur", what: "Abono mensual", amount: 285000, date: "30/10" },
+];
+
+const QUOTE_STYLE: Record<QuoteStatus, string> = {
+  Enviado: "bg-hielo text-azul",
+  Aprobado: "bg-emerald-100 text-emerald-800",
+  Facturado: "bg-noche text-hueso",
+};
 
 const COSTS = [
   { what: "Repuestos", who: "Autopartes Norte", amount: 820000 },
@@ -47,7 +67,7 @@ const MONTHS = [
 ];
 
 
-const SUGGESTIONS = ["¿Quién me debe?", "¿Cuánto facturé en octubre?", "¿Me acerco al tope?"];
+const SUGGESTIONS = ["¿Quién me debe?", "¿Cuánto facturé en octubre?", "¿Qué presupuestos tengo abiertos?"];
 
 const STATUS_STYLE: Record<Status, string> = {
   Cobrada: "bg-hielo text-azul",
@@ -105,6 +125,9 @@ export function SocioDashboard({ active }: { active?: boolean }) {
   const [reminded, setReminded] = useState<number[]>([]);
   const [hoverMonth, setHoverMonth] = useState<number | null>(null);
   const [newOpen, setNewOpen] = useState(false);
+  const [quotes, setQuotes] = useState<Quote[]>(QUOTES);
+  const [docTab, setDocTab] = useState<"Presupuestos" | "Recibos">("Presupuestos");
+  const [quoteOpen, setQuoteOpen] = useState(false);
   const [toast, setToast] = useState<{ title: string; body: string } | null>(null);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<{ q: string; a: string } | null>(null);
@@ -124,7 +147,12 @@ export function SocioDashboard({ active }: { active?: boolean }) {
   const ask = (q: string) => {
     const t = q.toLowerCase();
     let a: string;
-    if (/deb|deud|cobrar/.test(t)) {
+    if (/presupuest/.test(t)) {
+      const open = quotes.filter((x) => x.status !== "Facturado");
+      a = open.length
+        ? `Tenés ${open.length} presupuestos abiertos por ${short(open.reduce((s2, x) => s2 + x.amount, 0))}. ${open.filter((x) => x.status === "Aprobado").length} ya están aprobados: los podés pasar a factura.`
+        : "No tenés presupuestos abiertos.";
+    } else if (/deb|deud|cobrar/.test(t)) {
       a = debts.length
         ? `Te deben ${short(deben)} en ${debts.length} facturas: ${debts
             .slice(0, 3)
@@ -192,6 +220,27 @@ export function SocioDashboard({ active }: { active?: boolean }) {
   const remind = (inv: Invoice) => {
     setReminded((r) => [...r, inv.id]);
     notify({ title: `Recordatorio enviado a ${inv.who}`, body: "Por WhatsApp, con el PDF adjunto" });
+  };
+
+  const quoteNo = (id: number) => `P-${String(id).padStart(4, "0")}`;
+
+  const toInvoice = (qt: Quote) => {
+    const id = Math.max(...invoices.map((i) => i.id)) + 1;
+    setInvoices((list) => [{ id, who: qt.who, what: qt.what, status: "Pendiente", amount: qt.amount, date: "Hoy" }, ...list]);
+    setQuotes((list) => list.map((x) => (x.id === qt.id ? { ...x, status: "Facturado" } : x)));
+    notify({ title: `${quoteNo(qt.id)} pasó a Factura C 0001-${String(id).padStart(8, "0")}`, body: `${qt.who} · ${money(qt.amount)} · emitida en ARCA` });
+  };
+
+  const createQuote = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const amount = Number(String(data.get("monto")).replace(/\D/g, "")) || 0;
+    const who = String(data.get("cliente")).trim() || "Cliente";
+    const id = Math.max(...quotes.map((q) => q.id)) + 1;
+    setQuotes((list) => [{ id, who, what: String(data.get("concepto")).trim() || "Trabajo", amount, date: "Hoy", until: "en 30 días", status: "Enviado" }, ...list]);
+    setQuoteOpen(false);
+    setDocTab("Presupuestos");
+    notify({ title: `Presupuesto ${quoteNo(id)} creado`, body: `${who} · ${money(amount)} · listo para mandar` });
   };
 
   const createInvoice = (e: FormEvent<HTMLFormElement>) => {
@@ -281,7 +330,7 @@ export function SocioDashboard({ active }: { active?: boolean }) {
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
-                if (view === "Inicio" || view === "Costos") setView("Facturas");
+                if (view === "Inicio" || view === "Costos" || view === "Presupuestos") setView("Facturas");
               }}
               placeholder="Buscar cliente"
               className="w-32 bg-transparent text-azul outline-none placeholder:text-azul/50 lg:w-40"
@@ -448,6 +497,98 @@ export function SocioDashboard({ active }: { active?: boolean }) {
                 </Card>
               )}
 
+              {view === "Presupuestos" && (
+                <div>
+                  <p className="text-sm text-azul/70">Documentos que no son facturas: lo que cuesta algo y la constancia de un pago.</p>
+                  <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex rounded-full bg-white/70 p-1 ring-1 ring-border">
+                      {(["Presupuestos", "Recibos"] as const).map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setDocTab(t)}
+                          className={cn("rounded-full px-3 py-1 text-xs font-medium transition-colors", docTab === t ? "bg-azul text-hueso" : "text-azul/70 hover:text-azul")}
+                        >
+                          {t} ({t === "Presupuestos" ? quotes.length : RECEIPTS.length})
+                        </button>
+                      ))}
+                    </div>
+                    {docTab === "Presupuestos" && (
+                      <button
+                        type="button"
+                        onClick={() => setQuoteOpen(true)}
+                        className="flex items-center gap-1.5 rounded-lg bg-noche px-3 py-1.5 text-xs font-medium text-hueso hover:bg-azul"
+                      >
+                        <Plus className="size-3.5" aria-hidden />
+                        Nuevo presupuesto
+                      </button>
+                    )}
+                  </div>
+                  <ul className="mt-3 space-y-2.5">
+                    <AnimatePresence initial={false}>
+                      {docTab === "Presupuestos"
+                        ? quotes.map((qt) => (
+                            <motion.li key={qt.id} layout initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-border bg-white/80 p-3.5">
+                              <div className="flex flex-wrap items-start gap-x-2 gap-y-1">
+                                <span className="font-mono text-sm font-medium">{quoteNo(qt.id)}</span>
+                                <span className="text-sm font-semibold">{qt.who}</span>
+                                <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-medium", QUOTE_STYLE[qt.status])}>{qt.status}</span>
+                                <span className="ml-auto text-base font-semibold tabular-nums">{money(qt.amount)}</span>
+                              </div>
+                              <p className="mt-0.5 text-sm text-azul/70">{qt.what}</p>
+                              <p className="text-xs text-azul/50">
+                                {qt.date} · Válido hasta el {qt.until}
+                              </p>
+                              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                                {[
+                                  { l: "Ver PDF", t: `Abriendo ${quoteNo(qt.id)}.pdf` },
+                                  { l: "Mandar por WhatsApp", t: `Presupuesto enviado a ${qt.who}` },
+                                  { l: "Copiar link", t: "Link copiado" },
+                                ].map((a) => (
+                                  <button
+                                    key={a.l}
+                                    type="button"
+                                    onClick={() => notify({ title: a.t, body: `${quoteNo(qt.id)} · ${money(qt.amount)}` })}
+                                    className="rounded-lg border border-border bg-white px-2.5 py-1 text-xs font-medium transition-colors hover:border-azul"
+                                  >
+                                    {a.l}
+                                  </button>
+                                ))}
+                                <button
+                                  type="button"
+                                  disabled={qt.status === "Facturado"}
+                                  onClick={() => toInvoice(qt)}
+                                  className="rounded-lg bg-azul px-2.5 py-1 text-xs font-medium text-hueso transition-colors hover:bg-noche disabled:bg-hielo disabled:text-azul/60"
+                                >
+                                  {qt.status === "Facturado" ? "Ya facturado" : "Pasar a factura"}
+                                </button>
+                              </div>
+                            </motion.li>
+                          ))
+                        : RECEIPTS.map((r) => (
+                            <motion.li key={r.id} layout initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 rounded-2xl border border-border bg-white/80 p-3.5 text-sm">
+                              <span className="font-mono text-xs text-azul/60">R-{String(r.id).padStart(4, "0")}</span>
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate font-semibold">{r.who}</span>
+                                <span className="block truncate text-xs text-azul/60">
+                                  {r.what} · {r.date}
+                                </span>
+                              </span>
+                              <span className="font-semibold tabular-nums">{money(r.amount)}</span>
+                              <button
+                                type="button"
+                                onClick={() => notify({ title: `Recibo enviado a ${r.who}`, body: "Por WhatsApp, en PDF" })}
+                                className="rounded-lg border border-border bg-white px-2.5 py-1 text-xs font-medium hover:border-azul"
+                              >
+                                Mandar
+                              </button>
+                            </motion.li>
+                          ))}
+                    </AnimatePresence>
+                  </ul>
+                </div>
+              )}
+
               {view === "Cobranza" && (
                 <Card>
                   <div className="flex items-baseline justify-between">
@@ -603,6 +744,36 @@ export function SocioDashboard({ active }: { active?: boolean }) {
           </div>
         </form>
       </div>
+
+      {/* New quote */}
+      <AnimatePresence>
+        {quoteOpen && (
+          <motion.div className="absolute inset-0 z-20 flex items-center justify-center bg-noche/30 p-4 backdrop-blur-[2px]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <motion.form onSubmit={createQuote} className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl" initial={{ y: 16, scale: 0.98 }} animate={{ y: 0, scale: 1 }} exit={{ y: 10, opacity: 0 }}>
+              <div className="flex items-center justify-between">
+                <p className="font-display text-lg font-semibold">Nuevo presupuesto</p>
+                <button type="button" onClick={() => setQuoteOpen(false)} aria-label="Cerrar" className="rounded-full p-1 hover:bg-hielo">
+                  <X className="size-4" />
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-azul/60">O pedíselo a SOCIO por WhatsApp: “Haceme un presupuesto para…”.</p>
+              {[
+                { name: "cliente", label: "Cliente", value: "Carla Ruiz" },
+                { name: "concepto", label: "Trabajo", value: "Cambio de embrague" },
+                { name: "monto", label: "Monto", value: "180.000" },
+              ].map((f) => (
+                <label key={f.name} className="mt-3 block text-xs text-azul/60">
+                  {f.label}
+                  <input name={f.name} defaultValue={f.value} inputMode={f.name === "monto" ? "numeric" : undefined} className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm text-azul outline-none focus:border-azul" />
+                </label>
+              ))}
+              <button type="submit" className="mt-4 w-full rounded-lg bg-azul py-2.5 text-sm font-medium text-hueso hover:bg-noche">
+                Crear presupuesto
+              </button>
+            </motion.form>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* New invoice */}
       <AnimatePresence>
