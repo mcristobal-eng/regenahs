@@ -2,6 +2,7 @@
 
 import { Accordion } from "@base-ui/react/accordion";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 import { Reveal } from "./shared";
 import { WhatsAppPill } from "./whatsapp-pill";
 
@@ -56,9 +57,13 @@ const FAQS = [
   },
 ];
 
+const VISIBLE = 4;
+
 export function Faq() {
+  const [all, setAll] = useState(false);
+  const shown = all ? FAQS : FAQS.slice(0, VISIBLE);
   return (
-    <section id="faq" aria-labelledby="faq-title" className="scroll-mt-8 bg-background px-4 py-24 sm:px-8 sm:py-32">
+    <section id="faq" aria-labelledby="faq-title" className="scroll-mt-8 bg-background px-4 py-20 sm:px-8 sm:py-24">
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <Reveal onScroll className="lg:sticky lg:top-28 lg:self-start">
           <h2 id="faq-title" className="font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
@@ -71,7 +76,7 @@ export function Faq() {
         </Reveal>
         <Reveal onScroll delay={0.1}>
           <Accordion.Root className="flex w-full flex-col border-t">
-            {FAQS.map((item) => (
+            {shown.map((item) => (
               <Accordion.Item key={item.q} className="border-b">
                 <Accordion.Header className="flex">
                   <Accordion.Trigger className="group/trigger relative flex flex-1 items-start justify-between rounded-lg border border-transparent py-5 text-left text-base font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 sm:text-lg">
@@ -86,6 +91,15 @@ export function Faq() {
               </Accordion.Item>
             ))}
           </Accordion.Root>
+          <button
+            type="button"
+            onClick={() => setAll((v) => !v)}
+            aria-expanded={all}
+            className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline-offset-4 hover:underline"
+          >
+            {all ? "Ver menos" : `Ver todas las preguntas (${FAQS.length})`}
+            {all ? <ChevronUp className="size-4" aria-hidden /> : <ChevronDown className="size-4" aria-hidden />}
+          </button>
         </Reveal>
       </div>
     </section>
