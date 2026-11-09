@@ -5,7 +5,7 @@ import { FileText, HandCoins, Home, Receipt, Search, Sparkles, Users, Wallet } f
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SOCIO_AVATAR } from "./assets";
-import { CardMedia } from "./card-media";
+import { BACKGROUND_TONE, SectionBackdrop, type SectionBackground } from "./section-backgrounds";
 import { Reveal, asset } from "./shared";
 
 const NAV = [
@@ -299,21 +299,22 @@ function Dashboard() {
   );
 }
 
-export function DashboardSection() {
+export function DashboardSection({ background = "cielo", id = "panel" }: { background?: SectionBackground; id?: string }) {
+  const light = BACKGROUND_TONE[background] === "light";
   return (
-    <section id="panel" aria-labelledby="panel-title" className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
       <div className="relative isolate overflow-hidden rounded-[28px] px-4 py-16 sm:px-8 sm:py-24">
-        <CardMedia src={asset("/images/producto/cielo.jpg")} dither={false} drift />
+        <SectionBackdrop variant={background} />
         <div className="relative mx-auto flex max-w-5xl flex-col items-center">
-          <Reveal onScroll className="text-center text-white">
-            <h2 id="panel-title" className="font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance [text-shadow:0_2px_24px_rgb(0_40_90/0.25)]">
+          <Reveal onScroll className={light ? "text-center text-white" : "text-center text-azul"}>
+            <h2 id={`${id}-title`} className={cn("font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance", light && "[text-shadow:0_2px_24px_rgb(0_40_90/0.25)]")}>
               <span className="block">Y en la compu,</span>
               <span className="block">todo a la vista</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-pretty text-white/90 [text-shadow:0_1px_12px_rgb(0_40_90/0.3)] sm:text-lg">
+            <p className={cn("mx-auto mt-4 max-w-2xl text-base text-pretty sm:text-lg", light ? "text-white/90 [text-shadow:0_1px_12px_rgb(0_40_90/0.3)]" : "text-azul/80")}>
               Lo que le contás a SOCIO por WhatsApp queda ordenado en tu panel. Conectás Mercado Pago y cada cobro entra solo. Y con ChatGPT o Claude le preguntás por tus números sin buscar nada.
             </p>
-            <span aria-hidden className="mx-auto mt-8 block h-px w-48 bg-white/70" />
+            <span aria-hidden className={cn("mx-auto mt-8 block h-px w-48", light ? "bg-white/70" : "bg-azul/40")} />
           </Reveal>
           <Reveal onScroll delay={0.1} className="mt-10 w-full lg:h-[560px]">
             <Dashboard />
