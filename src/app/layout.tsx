@@ -1,26 +1,24 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, DM_Sans, Geist_Mono } from "next/font/google";
+import { Inter_Tight, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const interTight = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
+  weight: ["400", "600", "800"],
 });
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "core",
+  title: "SOCIO · Tus facturas, por WhatsApp",
   description:
-    "Sensores dentro del animal y AI para monitorear el ganado y anticipar problemas.",
+    "SOCIO es un asistente administrativo que funciona dentro de WhatsApp: arma tus facturas, te las muestra y las emite en ARCA solo cuando vos le decís que sí.",
+  icons: { icon: "/sites/socio/brand/isotipo.svg" },
 };
 
 export default function RootLayout({
@@ -29,10 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${dmSans.variable} ${bricolage.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="es" className={`${interTight.variable} ${jetbrainsMono.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
