@@ -5,6 +5,7 @@ import {
   motion,
   useInView,
   useMotionValue,
+  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -28,6 +29,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode,
 import { cn } from "@/lib/utils";
 import { CardMedia } from "./card-media";
 import { SOCIO_AVATAR, SOCIO_PHOTOS } from "./assets";
+import { ConnectedContent } from "./dashboard-section";
 import { Reveal, asset, clamp, smoothstep } from "./shared";
 
 /* ---------- Card 1: the voice message ---------- */
@@ -313,8 +315,7 @@ const CARDS: Card[] = [
 const RADIUS = "rounded-[28px]";
 // Scroll budget, in vh: card transitions, a short hold, the expand, the chat entrance.
 const STACK = (CARDS.length - 1) * 100;
-// Card transitions plus a short hold on the last card.
-const TOTAL = STACK + 60;
+const TOTAL = STACK + 35 + 160 + 260;
 
 function CardCopy({ card, className }: { card: Card; className?: string }) {
   return (
@@ -431,8 +432,12 @@ function DesktopScene() {
     const i = Math.min(Math.floor(raw), n - 1);
     return i + smoothstep(clamp(raw - i));
   });
-  // The chat now lives in the dashboard section, so the last card no longer expands.
-  const expand = useTransform(scrollYProgress, () => 0);
+  // After the last card, it grows to fill the screen and the chat + panel come in over the sky.
+  const expand = useTransform(scrollYProgress, (p) => smoothstep(clamp((p * TOTAL - STACK - 35) / 160)));
+  const reveal = useTransform(scrollYProgress, (p) => smoothstep(clamp((p * TOTAL - STACK - 35 - 120) / 110)));
+  const revealY = useTransform(reveal, [0, 1], [60, 0]);
+  const [active, setActive] = useState(false);
+  useMotionValueEvent(reveal, "change", (v) => setActive(v > 0.6));
 
   const { scrollYProgress: exit } = useScroll({ target: ref, offset: ["end end", "end start"] });
   const exitP = useTransform(exit, [0, 0.35], [0, 1], { clamp: true });
@@ -446,6 +451,13 @@ function DesktopScene() {
     <ExpandContext.Provider value={expand}>
       <div ref={ref} className="-mt-[6vh]" style={{ height: `${TOTAL + 100}vh` }}>
         <motion.div ref={scene} className="sticky top-0 flex h-svh items-center will-change-[clip-path]" style={{ clipPath }}>
+          <motion.div
+            id="panel"
+            className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-8 pt-6"
+            style={{ opacity: reveal, y: revealY }}
+          >
+            <ConnectedContent active={active} />
+          </motion.div>
           <div className="mx-auto grid w-full max-w-[1440px] grid-cols-[1fr_min(56vw,900px)_1fr] items-center gap-x-10 px-8">
             <div className="relative h-full w-full max-w-64 justify-self-end">
               {CARDS.map((card, i) =>
@@ -485,6 +497,14 @@ function MobileList() {
           </Reveal>
         </div>
       ))}
+      <Reveal onScroll>
+        <div id="panel" className={cn("relative scroll-mt-8 overflow-hidden px-3 py-12 sm:px-6", RADIUS)}>
+          <CardMedia src={asset("/images/producto/cielo.jpg")} dither={false} drift />
+          <div className="relative">
+            <ConnectedContent compact />
+          </div>
+        </div>
+      </Reveal>
     </div>
   );
 }

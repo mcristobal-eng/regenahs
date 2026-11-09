@@ -7,8 +7,7 @@ import { cn } from "@/lib/utils";
 import { MercadoPagoLogo, WhatsAppLogo } from "./brand-logos";
 import { SOCIO_AVATAR } from "./assets";
 import { ChatDemo } from "./chat-demo";
-import { AuroraBackdrop } from "./section-backgrounds";
-import { Reveal, asset } from "./shared";
+import { asset } from "./shared";
 
 const NAV = [
   { icon: Home, label: "Inicio", active: true },
@@ -76,10 +75,13 @@ function Counter({ value, prefix, suffix, decimals, run }: { value: number; pref
   return <span ref={ref} />;
 }
 
-function Dashboard() {
+function Dashboard({ active }: { active?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { amount: 0.35, once: true });
-  const live = useInView(ref, { amount: 0.35 });
+  const seen = useInView(ref, { amount: 0.35, once: true });
+  const visible = useInView(ref, { amount: 0.35 });
+  // Inside the scroll scene the parent says when the panel is actually shown.
+  const inView = active ?? seen;
+  const live = active ?? visible;
   const reduced = useReducedMotion();
   const run = inView && !reduced;
   const [toast, setToast] = useState(-1);
@@ -333,61 +335,34 @@ const INTEGRATIONS = [
   { name: "Claude", note: "Consultás tus números", mark: <ImgMark src={asset("/brand/claude.svg")} /> },
 ];
 
-export function DashboardSection() {
+/** Integrations, WhatsApp chat and dashboard, laid out over the sky card. */
+export function ConnectedContent({ active, compact = false }: { active?: boolean; compact?: boolean }) {
   return (
-    <section id="panel" aria-labelledby="panel-title" className="scroll-mt-8 px-3 py-3 sm:px-6 sm:py-6">
-      <div className="relative isolate overflow-hidden rounded-[28px] px-4 py-16 sm:px-8 sm:py-24">
-        <AuroraBackdrop />
-        <div className="relative mx-auto flex max-w-7xl flex-col items-center">
-          <Reveal onScroll className="text-center text-white">
-            <h2 id="panel-title" className="font-display text-[clamp(2.25rem,4.6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance">
-              <span className="block">Lo de todos los días en un chat,</span>
-              <span className="block">y todo a la vista en tu panel</span>
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base text-pretty text-white/85 sm:text-lg">
-              Le escribís a SOCIO por WhatsApp y todo queda ordenado en tu panel. Conectás Mercado Pago para que cada cobro entre solo, y ChatGPT o Claude para preguntarle por tus números.
-            </p>
-          </Reveal>
-
-          <Reveal onScroll delay={0.05} className="mt-8 w-full">
-            <p className="text-center font-mono text-[11px] tracking-[0.18em] text-white/60 uppercase">Se conecta con</p>
-            <ul className="mx-auto mt-3 grid max-w-4xl grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center sm:gap-2.5">
-              {INTEGRATIONS.map((it) => (
-                <li key={it.name} className="flex items-center gap-2.5 rounded-full bg-white/10 py-1.5 pr-4 pl-1.5 text-white ring-1 ring-white/20 backdrop-blur-md">
-                  {it.mark}
-                  <span className="leading-tight">
-                    <span className="block text-sm font-semibold">{it.name}</span>
-                    <span className="hidden text-[11px] text-white/65 sm:block">{it.note}</span>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <div className="mt-10 grid w-full gap-4 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:items-stretch">
-            <Reveal onScroll delay={0.1} className="flex flex-col">
-              <p className="mb-2 flex items-center gap-2 px-1 text-sm font-medium text-white">
-                <WhatsAppMark />
-                En WhatsApp
-              </p>
-              <div className="h-[520px] lg:h-[560px]">
-                <ChatDemo className="h-full" />
-              </div>
-            </Reveal>
-            <Reveal onScroll delay={0.18} className="flex min-w-0 flex-col">
-              <p className="mb-2 flex items-center gap-2 px-1 text-sm font-medium text-white">
-                <span className="flex size-7 items-center justify-center rounded-full bg-white text-azul">
-                  <Home className="size-4" aria-hidden />
-                </span>
-                En tu panel web
-              </p>
-              <div className="lg:h-[560px]">
-                <Dashboard />
-              </div>
-            </Reveal>
-          </div>
+    <div className="mx-auto flex w-full max-w-[1200px] min-w-0 flex-col items-center">
+      <div className="text-center text-white">
+        <h2 className="font-display text-[clamp(2rem,3.6vw,3.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance [text-shadow:0_2px_24px_rgb(0_40_90/0.25)]">
+          Lo de todos los días en un chat, y todo a la vista en tu panel
+        </h2>
+        <p className="mx-auto mt-3 max-w-2xl text-sm text-pretty text-white/90 [text-shadow:0_1px_12px_rgb(0_40_90/0.3)] sm:text-base">
+          Le escribís a SOCIO por WhatsApp y todo queda ordenado en tu panel. Conectás Mercado Pago para que cada cobro entre solo, y ChatGPT o Claude para preguntarle por tus números.
+        </p>
+      </div>
+      <ul className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:justify-center">
+        {INTEGRATIONS.map((it) => (
+          <li key={it.name} className="flex items-center gap-2 rounded-full bg-white/90 py-1 pr-3.5 pl-1 text-azul shadow-[0_6px_20px_-10px_rgb(0_30_70/0.45)] backdrop-blur-md">
+            {it.mark}
+            <span className="text-sm font-semibold">{it.name}</span>
+          </li>
+        ))}
+      </ul>
+      <div className={cn("mt-5 grid w-full grid-cols-1 gap-4", !compact && "lg:grid-cols-[minmax(0,340px)_minmax(0,1fr)]")}>
+        <div className={cn("min-w-0", compact ? "h-[520px]" : "h-[520px] lg:h-[min(520px,54svh)]")}>
+          <ChatDemo playing={active} className="h-full" />
+        </div>
+        <div className={cn("min-w-0", !compact && "lg:h-[min(520px,54svh)]")}>
+          <Dashboard active={active} />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,6 +1,5 @@
 import { AgentsSection } from "@/components/sites/core/agents-section";
 import { Cierre } from "@/components/sites/core/cierre";
-import { DashboardSection } from "@/components/sites/core/dashboard-section";
 import { DotWordmark } from "@/components/sites/core/dot-wordmark";
 import { Faq } from "@/components/sites/core/faq";
 import { Footer } from "@/components/sites/core/footer";
@@ -19,7 +18,6 @@ export default function Home() {
         <ProductIntro />
         <ProductCards />
         <AgentsSection />
-        <DashboardSection />
         <Pricing />
         <Faq />
         <Cierre />
