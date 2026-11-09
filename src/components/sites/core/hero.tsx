@@ -109,8 +109,8 @@ export function Hero() {
       <div className="flex w-full flex-1 flex-col items-center justify-center pt-[4vh]">
         <Reveal delay={0.1}>
           <h1 className="max-w-6xl font-display text-[clamp(2.5rem,6vw,5.75rem)] leading-[1.02] font-semibold tracking-[-0.03em] [text-shadow:0_2px_24px_rgb(0_0_0/0.3)]">
-            <span className="block">Tus facturas,</span>
-            <span className="block text-balance">por WhatsApp</span>
+            <span className="block">Vos atendés el negocio.</span>
+            <span className="block text-balance">SOCIO factura.</span>
           </h1>
         </Reveal>
         <Reveal delay={0.25} className="mt-10 flex w-full max-w-xl flex-col items-center gap-1 [text-shadow:0_1px_10px_rgb(0_0_0/0.45)]">
