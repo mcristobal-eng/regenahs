@@ -4,6 +4,7 @@ import { DotWordmark } from "@/components/sites/core/dot-wordmark";
 import { Faq } from "@/components/sites/core/faq";
 import { Footer } from "@/components/sites/core/footer";
 import { Hero } from "@/components/sites/core/hero";
+import { Integrations } from "@/components/sites/core/integrations";
 import { Navbar } from "@/components/sites/core/navbar";
 import { Pricing } from "@/components/sites/core/pricing";
 import { ProductCards } from "@/components/sites/core/product-cards";
@@ -18,6 +19,7 @@ export default function Home() {
         <ProductIntro />
         <ProductCards />
         <AgentsSection />
+        <Integrations />
         <Pricing />
         <Faq />
         <Cierre />

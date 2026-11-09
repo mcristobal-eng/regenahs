@@ -136,7 +136,7 @@ export function ChatHeading({ className }: { className?: string }) {
         <span className="block">en un chat</span>
       </h2>
       <p className="mt-4 max-w-xl text-base text-pretty text-white/90 [text-shadow:0_1px_12px_rgb(0_40_90/0.3)] sm:text-lg">
-        Facturá, anotá tus cobros y preguntale quién te debe, desde el WhatsApp que ya usás. Sin apps para instalar.
+        Todo funciona en WhatsApp: facturá, anotá tus cobros y preguntale quién te debe desde el chat que ya usás. Sin apps para instalar.
       </p>
       <span aria-hidden className="mx-auto mt-8 block h-px w-48 bg-white/70" />
     </div>

@@ -39,6 +39,14 @@ const FAQS = [
     a: "Sí, te avisa cuando te estás acercando al tope de tu categoría, antes de que te pases. Y si le preguntás cuánto facturaste, te lo dice al momento.",
   },
   {
+    q: "¿Se conecta con Mercado Pago?",
+    a: "Sí. Lo conectás una vez desde el panel y cada cobro entra solo: si coincide con una factura, la marca como cobrada, y si no, lo anota como ingreso. Los pagos que hacés vos no los cuenta como ingresos.",
+  },
+  {
+    q: "¿Puedo consultar mis números desde ChatGPT o Claude?",
+    a: "Sí. El panel de SOCIO se integra con ChatGPT o Claude, así podés preguntarle por tus facturas, tus cobros o quién te debe desde ahí.",
+  },
+  {
     q: "¿Tengo que darle mi clave fiscal?",
     a: "Elegís vos. Podés autorizar a SOCIO desde ARCA para que facture en tu nombre, sin compartir la clave, o hacerlo con nuestra ayuda: lo conectamos nosotros con tu CUIT y tu clave fiscal.",
   },
