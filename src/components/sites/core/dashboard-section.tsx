@@ -1,9 +1,10 @@
 "use client";
 
 import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "motion/react";
-import { FileText, HandCoins, Home, MessageCircle, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
+import { FileText, Home, Receipt, Search, Sparkles, Users, Wallet } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { MercadoPagoLogo, WhatsAppLogo } from "./brand-logos";
 import { SOCIO_AVATAR } from "./assets";
 import { ChatDemo } from "./chat-demo";
 import { AuroraBackdrop } from "./section-backgrounds";
@@ -286,8 +287,8 @@ function Dashboard() {
             exit={{ opacity: 0, y: -10, transition: { duration: 0.25 } }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
           >
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-hielo">
-              <HandCoins className="size-4" aria-hidden />
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-[#e6f7fd] text-[#00b1ea]">
+              <MercadoPagoLogo className="size-6" />
             </span>
             <span className="min-w-0 text-sm leading-tight">
               <span className="block truncate font-semibold">{TOASTS[toast].title}</span>
@@ -303,15 +304,15 @@ function Dashboard() {
 function WhatsAppMark() {
   return (
     <span className="flex size-7 items-center justify-center rounded-full bg-[#25d366] text-white">
-      <MessageCircle className="size-4" aria-hidden />
+      <WhatsAppLogo className="size-4" />
     </span>
   );
 }
 
 function MercadoPagoMark() {
   return (
-    <span className="flex size-7 items-center justify-center rounded-full bg-[#00b1ea] text-white">
-      <HandCoins className="size-4" aria-hidden />
+    <span className="flex size-7 items-center justify-center rounded-full bg-white text-[#00b1ea]">
+      <MercadoPagoLogo className="size-5" />
     </span>
   );
 }
