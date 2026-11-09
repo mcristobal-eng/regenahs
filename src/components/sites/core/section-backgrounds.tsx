@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { RadialLines } from "@/components/ui/radial-lines";
 
 /** Aurora: soft blurred blue lights drifting over noche, with a small amber glow. */
 export function AuroraBackdrop() {
@@ -25,24 +24,6 @@ export function AuroraBackdrop() {
         />
       ))}
       <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,transparent,rgb(0_8_70/0.55))]" />
-    </div>
-  );
-}
-
-/** Radial lines: a fan of fine hielo lines over azul, fading toward the edges. */
-export function RadialLinesBackdrop() {
-  const reduced = useReducedMotion();
-  return (
-    <div aria-hidden className="absolute inset-0 overflow-hidden rounded-[inherit] bg-[radial-gradient(120%_90%_at_50%_0%,#0a1fd6_0%,#0000c8_35%,#00006b_100%)]">
-      <motion.div
-        className="absolute inset-[-25%]"
-        animate={reduced ? undefined : { rotate: [0, 6, 0] }}
-        transition={{ duration: 40, ease: "easeInOut", repeat: Infinity }}
-      >
-        <RadialLines lineCount={120} lineColor="#dce3ff" lineThickness={1} opacity={0.14} containerWidth="100%" containerHeight="100%" />
-      </motion.div>
-      <span className="absolute top-[38%] left-1/2 h-[45%] w-[55%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#3f9bff] opacity-25 blur-[100px]" />
-      <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_50%_40%,transparent_30%,rgb(0_0_60/0.7))]" />
     </div>
   );
 }

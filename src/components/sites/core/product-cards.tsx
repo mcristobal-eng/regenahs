@@ -28,7 +28,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode,
 import { cn } from "@/lib/utils";
 import { CardMedia } from "./card-media";
 import { SOCIO_AVATAR, SOCIO_PHOTOS } from "./assets";
-import { Reveal, clamp, smoothstep } from "./shared";
+import { Reveal, asset, clamp, smoothstep } from "./shared";
 
 /* ---------- Card 1: the voice message ---------- */
 
@@ -203,7 +203,7 @@ function Notification({ alert, ago, showContent }: { alert: (typeof ALERTS)[numb
   );
 }
 
-export function PhoneAlerts() {
+function PhoneAlerts() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { amount: 0.4 });
   const reduced = useReducedMotion();
@@ -298,6 +298,15 @@ const CARDS: Card[] = [
     side: "right",
     image: SOCIO_PHOTOS.factura,
     content: <EventLog />,
+  },
+  {
+    title: "Con tu confirmación, la emito en ARCA",
+    text: "Sin tu confirmación no se emite nada. Te llega el PDF por WhatsApp, listo para mandárselo a tu cliente.",
+    side: "left",
+    image: asset("/images/producto/cielo.jpg"),
+    dither: false,
+    drift: true,
+    content: <PhoneAlerts />,
   },
 ];
 

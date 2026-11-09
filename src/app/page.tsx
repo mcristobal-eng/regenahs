@@ -1,3 +1,4 @@
+import { AgentsSection } from "@/components/sites/core/agents-section";
 import { Cierre } from "@/components/sites/core/cierre";
 import { DashboardSection } from "@/components/sites/core/dashboard-section";
 import { DotWordmark } from "@/components/sites/core/dot-wordmark";
@@ -17,6 +18,7 @@ export default function Home() {
         <Hero />
         <ProductIntro />
         <ProductCards />
+        <AgentsSection />
         <DashboardSection />
         <Pricing />
         <Faq />
