@@ -4,18 +4,22 @@ import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { ENTER_DURATION, ENTER_EASE, SOCIALS, asset } from "./shared";
+import { APP_URL, WHATSAPP_URL } from "./assets";
+import { ENTER_DURATION, ENTER_EASE } from "./shared";
+import { Wordmark } from "./wordmark";
 
 const NAV = [
   { label: "Producto", href: "#producto" },
-  { label: "Agentes", href: "#agentes" },
-  { label: "Historias", href: "#historias" },
+  { label: "Precio", href: "#precio" },
+  { label: "Ayuda", href: "#faq" },
 ];
 
 function DemoButton({ size = "default", className, onClick }: { size?: "default" | "lg"; className?: string; onClick?: () => void }) {
   return (
     <a
-      href="#contacto"
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noopener noreferrer"
       onClick={onClick}
       className={cn(
         "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-core-orange pr-2.5 pl-2 text-sm font-medium whitespace-nowrap text-white transition-all hover:bg-core-orange/90",
@@ -27,7 +31,7 @@ function DemoButton({ size = "default", className, onClick }: { size?: "default"
         <span className="absolute inline-flex size-full rounded-full bg-white opacity-75 motion-safe:animate-ping" />
         <span className="relative inline-flex size-1.5 rounded-full bg-white" />
       </span>
-      Demo
+      WhatsApp
     </a>
   );
 }
@@ -58,9 +62,8 @@ export function Navbar() {
           transition={{ duration: ENTER_DURATION, ease: ENTER_EASE }}
         >
           <div className="flex items-center gap-10">
-            <a href="#" aria-label="core, inicio" className="flex items-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={asset("/brand/logo-poppins.svg")} alt="core" width={77} height={24} className="h-6 w-auto brightness-0 invert" />
+            <a href="#" aria-label="SOCIO, inicio" className="flex items-center text-white">
+              <Wordmark className="text-[28px]" />
             </a>
             <nav aria-label="Principal" className="hidden items-center gap-7 md:flex">
               {NAV.map((item) => (
@@ -71,20 +74,9 @@ export function Navbar() {
             </nav>
           </div>
           <div className="hidden items-center md:flex">
-            <div className="flex items-center gap-1">
-              {SOCIALS.map(({ label, href, Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="inline-flex size-8 items-center justify-center rounded-lg text-white transition-all hover:bg-white/15 [&_svg]:size-4"
-                >
-                  <Icon />
-                </a>
-              ))}
-            </div>
+            <a href={`${APP_URL}/login`} className="text-[15px] font-medium text-white/90 transition-colors duration-200 hover:text-white">
+              Iniciar sesión
+            </a>
             <span className="mx-4 h-5 w-px bg-white/30" aria-hidden />
             <DemoButton />
           </div>
@@ -133,19 +125,10 @@ export function Navbar() {
                     </a>
                   </motion.div>
                 ))}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ delay: 0.4 }} className="flex gap-2 pt-2">
-                  {SOCIALS.map(({ label, href, Icon }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-background hover:bg-muted [&_svg]:size-4"
-                    >
-                      <Icon />
-                    </a>
-                  ))}
+                <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ delay: 0.4 }}>
+                  <a href={`${APP_URL}/login`} onClick={close} className="text-base font-medium text-foreground">
+                    Iniciar sesión
+                  </a>
                 </motion.div>
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ delay: 0.5 }} className="pt-4">
                   <DemoButton size="lg" onClick={close} className="w-full" />

@@ -8,17 +8,17 @@ import {
   useTransform,
 } from "motion/react";
 import {
-  TrendingDown,
   CircleCheck,
-  ClipboardList,
-  Heart,
-  Thermometer,
+  FileText,
+  HandCoins,
+  Landmark,
+  ListChecks,
   TriangleAlert,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Reveal, asset } from "./shared";
-import { WaitlistForm } from "./waitlist-form";
+import { WhatsAppPill } from "./whatsapp-pill";
 
 const VIDEO_FILTER = "[filter:brightness(1.08)_saturate(1.12)_sepia(0.18)_hue-rotate(-6deg)]";
 
@@ -95,12 +95,12 @@ function HeroVideo() {
 }
 
 const TICKER = [
-  { icon: Thermometer, text: "Vaca #010 con 40,3 °C · Aviso enviado al veterinario" },
-  { icon: TrendingDown, text: "Rodeo 3: rumia baja en 4 animales · Recorrida priorizada" },
-  { icon: Heart, text: "Vaca #128 en celo · Agendada para inseminación" },
-  { icon: TriangleAlert, text: "Ternero #057 sin actividad hace 6 h · Alerta al encargado" },
-  { icon: CircleCheck, text: "Vaca #342 con valores normales hace 48 h · Alerta cerrada" },
-  { icon: ClipboardList, text: "Informe semanal del rodeo listo · Enviado por WhatsApp" },
+  { icon: FileText, text: "Factura C a Martina López por $45.000 · Emitida en ARCA" },
+  { icon: HandCoins, text: "Entró $32.000 de Lucía Gómez · Mercado Pago, ¿la facturamos?" },
+  { icon: Landmark, text: "Entró $18.500 de Diego · Transferencia anotada" },
+  { icon: CircleCheck, text: "García pagó $45.000 · Factura 0001-128 cobrada" },
+  { icon: ListChecks, text: "Te deben $120.000 entre García, López y Taller Ruiz" },
+  { icon: TriangleAlert, text: "Te acercás al tope de tu categoría · Te avisamos a tiempo" },
 ];
 
 function AgentTicker({ className }: { className?: string }) {
@@ -138,17 +138,17 @@ export function Hero() {
       <div className="flex w-full flex-1 flex-col items-center justify-center pt-[4vh]">
         <Reveal delay={0.1}>
           <h1 className="max-w-6xl font-display text-[clamp(2.5rem,6vw,5.75rem)] leading-[1.02] font-semibold tracking-[-0.03em] [text-shadow:0_2px_24px_rgb(0_0_0/0.3)]">
-            <span className="block">Cada animal da señales</span>
-            <span className="block text-balance">y ahora podés leerlas</span>
+            <span className="block">Tus facturas,</span>
+            <span className="block text-balance">por WhatsApp</span>
           </h1>
         </Reveal>
         <Reveal delay={0.25} className="mt-10 flex w-full max-w-xl flex-col items-center gap-1 [text-shadow:0_1px_10px_rgb(0_0_0/0.45)]">
-          <p className="text-base sm:text-lg">Core te acerca a tu rodeo</p>
+          <p className="text-base sm:text-lg">SOCIO, tu asistente de administración en WhatsApp</p>
           <AgentTicker className="text-white/65" />
         </Reveal>
       </div>
       <Reveal delay={0.4} className="mt-12 flex w-full justify-center">
-        <WaitlistForm />
+        <WhatsAppPill />
       </Reveal>
     </section>
   );

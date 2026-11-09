@@ -3,40 +3,48 @@
 import { Accordion } from "@base-ui/react/accordion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Reveal } from "./shared";
-import { WaitlistForm } from "./waitlist-form";
+import { WhatsAppPill } from "./whatsapp-pill";
 
 const FAQS = [
   {
-    q: "¿Qué es core?",
-    a: "Es un bolo que vive en el rumen de cada animal y mide sus signos vitales todo el día, más una plataforma con agentes de IA que interpreta esos datos y te avisa qué hacer.",
+    q: "¿Cómo hago una factura C del monotributo sin entrar a ARCA?",
+    a: "Le escribís a SOCIO por WhatsApp lo que cobraste, por ejemplo “Facturale $50.000 a Juan Pérez por arreglo”. Arma la factura C, te la muestra y, cuando se lo confirmás, la emite en ARCA y te manda el PDF. No tenés que entrar a la página de ARCA ni buscar la clave.",
   },
   {
-    q: "¿Cómo se coloca el bolo? ¿Es seguro para el animal?",
-    a: "Se administra por vía oral con un aplicador, como cualquier bolo ruminal, y queda alojado en el retículo-rumen. No requiere cirugía y el animal sigue su rutina normal.",
+    q: "¿Puedo facturar con un mensaje, un audio o una foto?",
+    a: "Sí. Todo pasa en el WhatsApp que ya usás: le escribís, le mandás un audio o la foto de un comprobante, y SOCIO arma la factura. No hay que instalar ninguna app.",
   },
   {
-    q: "¿Qué datos mide?",
-    a: "Temperatura interna, actividad y rumia. Con eso la plataforma detecta fiebre, celos, caídas de consumo y cambios de comportamiento de cada animal.",
+    q: "¿SOCIO hace facturas A y B si soy responsable inscripto?",
+    a: "Sí. Hace facturas A, B y C. Para una factura A necesita el CUIT de tu cliente: si no lo tiene, te lo pide antes de emitir.",
   },
   {
-    q: "¿Necesito internet en el campo?",
-    a: "Los bolos envían sus datos a una antena que se instala en el campo y los sube a la nube. Te contamos qué opción de conexión conviene según tu establecimiento.",
+    q: "¿SOCIO emite sin que yo lo apruebe?",
+    a: "No. Siempre te muestra la factura antes y espera tu confirmación. Si algo está mal, se lo decís y la corrige antes de emitir.",
   },
   {
-    q: "¿Cuánto dura la batería?",
-    a: "El bolo está pensado para acompañar al animal durante años sin mantenimiento. La duración exacta depende de la frecuencia de medición que elijas.",
+    q: "¿La factura es válida? ¿Es seguro con ARCA?",
+    a: "Sí. Las facturas se emiten en ARCA, el sistema oficial que antes se llamaba AFIP, con su CAE. Valen lo mismo que las que hacés vos desde la página, y te llega el PDF por WhatsApp.",
   },
   {
-    q: "¿Sirve para cría, invernada y tambo?",
-    a: "Sí. Las alertas y los agentes se adaptan a cada sistema: celos y preñez en cría, ganancia de peso en invernada y salud y producción en tambo.",
+    q: "¿Cómo sé quién me debe plata?",
+    a: "Le preguntás “¿Quién me debe?” por WhatsApp y te contesta con la lista y cuánto debe cada uno. SOCIO lleva la cuenta de cada cliente con las facturas y los cobros que va anotando.",
   },
   {
-    q: "¿Cómo lo conecto con ChatGPT o Claude?",
-    a: "Desde la plataforma activás la integración con tu cuenta y listo: ya podés pedirle informes, consultas sobre tu rodeo u órdenes de compra desde el chat.",
+    q: "¿Puedo anotar cobros en efectivo o por transferencia?",
+    a: "Sí. Le escribís “Me pagó Juan en efectivo” o le reenviás el comprobante de la transferencia. También lee el extracto del banco. Todo queda en un solo registro, junto con lo de Mercado Pago.",
   },
   {
-    q: "¿Cuánto cuesta y cuándo puedo empezar?",
-    a: "Estamos sumando los primeros establecimientos. Dejanos tu email y te contactamos con una propuesta según el tamaño de tu rodeo.",
+    q: "¿SOCIO me avisa si me acerco al tope del monotributo?",
+    a: "Sí, te avisa cuando te estás acercando al tope de tu categoría, antes de que te pases. Y si le preguntás cuánto facturaste, te lo dice al momento.",
+  },
+  {
+    q: "¿Tengo que darle mi clave fiscal?",
+    a: "Elegís vos. Podés autorizar a SOCIO desde ARCA para que facture en tu nombre, sin compartir la clave, o hacerlo con nuestra ayuda: lo conectamos nosotros con tu CUIT y tu clave fiscal.",
+  },
+  {
+    q: "Ya tengo contador. ¿Para qué me sirve?",
+    a: "SOCIO no lo reemplaza. Tu contador sigue con las declaraciones. SOCIO se ocupa de lo de todos los días: facturar y anotar lo que cobrás, sin que tengas que llamarlo por cada venta.",
   },
 ];
 
@@ -46,12 +54,12 @@ export function Faq() {
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <Reveal onScroll className="lg:sticky lg:top-28 lg:self-start">
           <h2 id="faq-title" className="font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
-            Preguntas frecuentes
+            Preguntas comunes
           </h2>
           <p className="mt-4 max-w-sm text-base text-pretty text-muted-foreground">
-            Lo que más nos preguntan los productores antes de empezar. ¿Te quedó alguna duda? Escribinos.
+            SOCIO nunca emite una factura sin tu confirmación, y las facturas salen por ARCA, igual que si las hicieras vos. ¿Te quedó alguna duda? Escribinos.
           </p>
-          <WaitlistForm variant="light" className="mt-6" />
+          <WhatsAppPill variant="light" hint="¿Otra consulta?" label="Escribinos" className="mt-6" />
         </Reveal>
         <Reveal onScroll delay={0.1}>
           <Accordion.Root className="flex w-full flex-col border-t">

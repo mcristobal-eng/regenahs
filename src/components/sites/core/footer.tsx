@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { AgentCharacter, usePointer, type AgentShape } from "./agent-character";
-import { SOCIALS, asset, clamp } from "./shared";
-import { WaitlistForm } from "./waitlist-form";
+import { APP_URL, CALENDLY_URL, WHATSAPP_URL } from "./assets";
+import { clamp } from "./shared";
+import { WhatsAppPill } from "./whatsapp-pill";
 
 type FooterAgent = {
   name: string;
@@ -21,10 +22,10 @@ type FooterAgent = {
 };
 
 const FOOTER_AGENTS: FooterAgent[] = [
-  { name: "Agente sanitario", shape: "squircle", color: "#00f790", breathe: 3.2, x: 12, y: 47, size: 17, mx: 14, my: 57, msize: 27, rotation: -8, response: 0.9 },
-  { name: "Agente reproductivo", shape: "hexagon", color: "#f83e00", breathe: 3.8, x: 37, y: 40, size: 14, mx: 39, my: 47, msize: 22, rotation: 10, response: 1.1 },
-  { name: "Agente de nutrición y engorde", shape: "pill", color: "#f8ebd7", breathe: 3.5, x: 63, y: 52, size: 17, mx: 64, my: 62, msize: 27, rotation: -6, response: 1 },
-  { name: "Agente administrativo", shape: "sphere", color: "#0093d8", breathe: 4.1, x: 88, y: 41, size: 13, mx: 88, my: 50, msize: 21, rotation: 0, response: 1.2 },
+  { name: "Facturá", shape: "squircle", color: "#00f790", breathe: 3.2, x: 12, y: 47, size: 17, mx: 14, my: 57, msize: 27, rotation: -8, response: 0.9 },
+  { name: "Cobrá", shape: "hexagon", color: "#f83e00", breathe: 3.8, x: 37, y: 40, size: 14, mx: 39, my: 47, msize: 22, rotation: 10, response: 1.1 },
+  { name: "¿Quién me debe?", shape: "pill", color: "#f8ebd7", breathe: 3.5, x: 63, y: 52, size: 17, mx: 64, my: 62, msize: 27, rotation: -6, response: 1 },
+  { name: "Tu tope del monotributo", shape: "sphere", color: "#0093d8", breathe: 4.1, x: 88, y: 41, size: 13, mx: 88, my: 50, msize: 21, rotation: 0, response: 1.2 },
 ];
 
 /** Big wordmark with agents that spring away from a fine pointer. */
@@ -114,16 +115,12 @@ function FooterArt() {
 
   return (
     <div ref={ref} className="relative isolate aspect-[1.65] w-full overflow-visible select-none sm:aspect-[2.4]">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={asset("/brand/core.svg")}
-        alt=""
-        width={668}
-        height={186}
-        draggable={false}
-        loading="lazy"
-        className="pointer-events-none absolute bottom-[2%] left-1/2 z-[1] h-auto w-[96%] -translate-x-1/2"
-      />
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-[-4%] left-1/2 z-[1] -translate-x-1/2 font-display text-[clamp(7rem,30vw,27rem)] leading-[0.8] font-bold tracking-[-0.06em] text-black select-none"
+      >
+        socio
+      </span>
       {FOOTER_AGENTS.map((a, i) => (
         <div
           key={a.name}
@@ -167,43 +164,46 @@ export function Footer() {
       <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.1fr_1.4fr] lg:gap-20">
         <div>
           <h2 className="font-display text-[clamp(1.75rem,3vw,2.5rem)] leading-[1.05] font-semibold tracking-[-0.03em]">
-            Novedades del campo, en tu email
+            ¿Necesitás ayuda?
           </h2>
           <p className="mt-3 max-w-sm text-base text-pretty text-muted-foreground">
-            Lanzamientos, historias de productores y lo que vamos aprendiendo con core.
+            Escribinos por WhatsApp y te respondemos, o agendá una llamada y lo vemos juntos.
           </p>
-          <WaitlistForm variant="light" purpose="newsletter" className="mt-6" />
-          <p className="mt-3 text-sm text-muted-foreground">Sin spam. Pocos emails y te das de baja cuando quieras.</p>
+          <WhatsAppPill variant="light" hint="Te respondemos" label="Escribinos por WhatsApp" className="mt-6" />
+          <p className="mt-3 text-sm text-muted-foreground">
+            O{" "}
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:text-foreground">
+              agendá una llamada
+            </a>
+            .
+          </p>
         </div>
         <nav aria-label="Pie de página" className="grid grid-cols-2 gap-10 sm:grid-cols-3">
           <div>
             <p className="text-sm text-muted-foreground">Producto</p>
             <ul className="mt-4 flex flex-col gap-2.5">
-              <li><a href="#producto" className={LINK}>El bolo</a></li>
-              <li><a href="#producto" className={LINK}>Plataforma</a></li>
-              <li><a href="#producto" className={LINK}>ChatGPT y Claude</a></li>
-              <li><a href="#agentes" className={LINK}>Agentes de IA</a></li>
+              <li><a href="#producto" className={LINK}>Cómo funciona</a></li>
+              <li><a href="#precio" className={LINK}>Precio</a></li>
+              <li><a href={`${APP_URL}/login`} className={LINK}>Iniciar sesión</a></li>
+              <li><a href={`${APP_URL}/register`} className={LINK}>Crear cuenta</a></li>
             </ul>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Ayuda</p>
+            <p className="text-sm text-muted-foreground">Guías</p>
             <ul className="mt-4 flex flex-col gap-2.5">
-              <li><a href="#faq" className={LINK}>Preguntas frecuentes</a></li>
-              <li><a href="#contacto" className={LINK}>Pedir una demo</a></li>
-              <li><a href="#contacto" className={LINK}>Contacto</a></li>
+              <li><a href={`${APP_URL}/facturacion-electronica`} className={LINK}>Facturación electrónica</a></li>
+              <li><a href={`${APP_URL}/facturar-por-whatsapp`} className={LINK}>Facturar por WhatsApp</a></li>
+              <li><a href={`${APP_URL}/factura-a-y-b`} className={LINK}>Factura A o B</a></li>
+              <li><a href={`${APP_URL}/guias`} className={LINK}>Todas las guías</a></li>
             </ul>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Seguinos</p>
+            <p className="text-sm text-muted-foreground">Contacto</p>
             <ul className="mt-4 flex flex-col gap-2.5">
-              {SOCIALS.map(({ label, href, Icon }) => (
-                <li key={label}>
-                  <a href={href} target="_blank" rel="noopener noreferrer" className={LINK}>
-                    <Icon className="size-4" />
-                    {label}
-                  </a>
-                </li>
-              ))}
+              <li><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={LINK}>WhatsApp</a></li>
+              <li><a href="mailto:soysocio2026@gmail.com" className={LINK}>soysocio2026@gmail.com</a></li>
+              <li><a href={`${APP_URL}/privacidad`} className={LINK}>Privacidad</a></li>
+              <li><a href={`${APP_URL}/terminos`} className={LINK}>Términos</a></li>
             </ul>
           </div>
         </nav>
@@ -212,8 +212,8 @@ export function Footer() {
         <FooterArt />
       </div>
       <div className="mx-auto flex max-w-[1400px] flex-col gap-2 border-t py-6 text-sm text-muted-foreground sm:flex-row sm:justify-between">
-        <p>© 2026 core. Todos los derechos reservados.</p>
-        <p>made with care and love from argentina to the universe</p>
+        <p>© 2026 SOCIO. Todos los derechos reservados.</p>
+        <p>Hecho en Argentina</p>
       </div>
     </footer>
   );

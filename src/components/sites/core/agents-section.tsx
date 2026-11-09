@@ -15,10 +15,10 @@ type Agent = {
 };
 
 const AGENTS: Agent[] = [
-  { name: "Agente sanitario", shape: "squircle", color: "#00f790", at: { x: 19, y: 25 }, from: { x: -15, y: 0 }, size: 1, breathe: 3.2 },
-  { name: "Agente reproductivo", shape: "hexagon", color: "#f83e00", at: { x: 80, y: 23 }, from: { x: 115, y: -5 }, size: 0.95, breathe: 3.8 },
-  { name: "Agente de nutrición y engorde", shape: "pill", color: "#f8ebd7", at: { x: 23, y: 76 }, from: { x: -10, y: 115 }, size: 1.05, breathe: 3.5 },
-  { name: "Agente administrativo", shape: "sphere", color: "#0093d8", at: { x: 78, y: 74 }, from: { x: 112, y: 112 }, size: 0.9, breathe: 4.1 },
+  { name: "Facturá", shape: "squircle", color: "#00f790", at: { x: 19, y: 25 }, from: { x: -15, y: 0 }, size: 1, breathe: 3.2 },
+  { name: "Cobrá", shape: "hexagon", color: "#f83e00", at: { x: 80, y: 23 }, from: { x: 115, y: -5 }, size: 0.95, breathe: 3.8 },
+  { name: "¿Quién me debe?", shape: "pill", color: "#f8ebd7", at: { x: 23, y: 76 }, from: { x: -10, y: 115 }, size: 1.05, breathe: 3.5 },
+  { name: "Tu tope del monotributo", shape: "sphere", color: "#0093d8", at: { x: 78, y: 74 }, from: { x: 112, y: 112 }, size: 0.9, breathe: 4.1 },
 ];
 
 function FlyingAgent({
@@ -67,14 +67,14 @@ export function AgentsSection() {
   const pointer = usePointer();
 
   return (
-    <section ref={ref} id="agentes" aria-label="Agentes de IA" className="relative h-[240vh] bg-background">
+    <section ref={ref} id="que-hace" aria-label="Qué hace SOCIO" className="relative h-[240vh] bg-background">
       <div className="sticky top-0 h-svh overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center px-6">
           <motion.h2
             className="max-w-[14ch] text-center font-display text-[clamp(2.25rem,5vw,4.5rem)] leading-[1.02] font-semibold tracking-[-0.03em] text-balance sm:max-w-[18ch]"
             style={{ opacity, filter, y }}
           >
-            Agentes de IA que cuidan el rodeo mientras vos decidís
+            Facturá, cobrá y sabé quién te debe, sin salir del chat
           </motion.h2>
         </div>
         {AGENTS.map((agent, i) => (

@@ -12,14 +12,16 @@ import {
   type MotionValue,
 } from "motion/react";
 import {
-  Activity,
   BatteryFull,
   Check,
+  CheckCheck,
   CircleCheck,
-  Footprints,
+  FileText,
+  HandCoins,
+  Landmark,
   LoaderCircle,
-  Thermometer,
-  TrendingDown,
+  Mic,
+  UserRound,
   Wifi,
   X,
 } from "lucide-react";
@@ -27,49 +29,43 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode,
 import { cn } from "@/lib/utils";
 import { CardMedia } from "./card-media";
 import { ChatDemo, ChatHeading } from "./chat-demo";
+import { SOCIO_AVATAR } from "./assets";
 import { Reveal, asset, clamp, smoothstep } from "./shared";
 
-/* ---------- Card 1: the bolus ---------- */
+/* ---------- Card 1: the voice message ---------- */
 
-function Dimension({ orientation, label }: { orientation: "horizontal" | "vertical"; label: string }) {
-  const h = orientation === "horizontal";
-  return (
-    <div
-      aria-hidden
-      className={
-        h
-          ? "pointer-events-none absolute inset-x-0 top-full mt-5 flex translate-y-1 flex-col items-center gap-2 opacity-0 transition duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100"
-          : "pointer-events-none absolute inset-y-0 left-full ml-5 flex -translate-x-1 items-center gap-2 opacity-0 transition duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
-      }
-    >
-      <div className={(h ? "relative h-2.5 w-full" : "relative h-full w-2.5") + " drop-shadow-[0_1px_2px_rgb(0_0_0/0.5)]"}>
-        <span className={h ? "absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white" : "absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white"} />
-        <span className={h ? "absolute inset-y-0 left-0 w-px bg-white" : "absolute inset-x-0 top-0 h-px bg-white"} />
-        <span className={h ? "absolute inset-y-0 right-0 w-px bg-white" : "absolute inset-x-0 bottom-0 h-px bg-white"} />
-      </div>
-      <span className="rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-medium whitespace-nowrap text-white tabular-nums backdrop-blur-md sm:text-xs">{label}</span>
-    </div>
-  );
-}
-
-function BolusVisual() {
+function VoiceNote() {
   const reduced = useReducedMotion();
+  const bars = [6, 14, 9, 18, 12, 22, 10, 16, 8, 20, 13, 7, 17, 11, 19, 9, 15, 6, 12, 8];
   return (
     <motion.div
-      className="group relative w-[min(50%,460px)] -translate-x-4"
-      animate={reduced ? undefined : { y: [0, -10, 0] }}
+      className="w-full max-w-sm rounded-2xl bg-black/45 p-4 text-white shadow-[0_24px_60px_-20px_rgb(0_0_0/0.6)] ring-1 ring-white/15 backdrop-blur-xl"
+      animate={reduced ? undefined : { y: [0, -8, 0] }}
       transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={asset("/images/producto/bolo-front.webp")}
-        alt="Bolo intrarruminal de core: 100 mm de largo y 32 mm de diámetro"
-        width={1400}
-        height={406}
-        className="h-auto w-full drop-shadow-[0_40px_40px_rgb(0_0_0/0.45)]"
-      />
-      <Dimension orientation="horizontal" label="100 mm" />
-      <Dimension orientation="vertical" label="32 mm" />
+      <div className="flex items-center gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-core-ink">
+          <Mic className="size-4" aria-hidden />
+        </span>
+        <div className="flex h-10 flex-1 items-center gap-[3px]" aria-hidden>
+          {bars.map((h, i) => (
+            <motion.span
+              key={i}
+              className="w-[3px] rounded-full bg-white/80"
+              style={{ height: h }}
+              animate={reduced ? undefined : { scaleY: [1, 0.45, 1] }}
+              transition={{ duration: 1.1, repeat: Infinity, delay: i * 0.06, ease: "easeInOut" }}
+            />
+          ))}
+        </div>
+        <span className="font-mono text-xs text-white/70 tabular-nums">0:12</span>
+      </div>
+      <p className="mt-3 border-t border-white/10 pt-3 text-[15px] leading-snug text-white/90">
+        “Le cobré 45 lucas a Martina López por el diseño del logo.”
+      </p>
+      <p className="mt-2 flex items-center justify-end gap-1 text-xs text-white/55">
+        10:41 <CheckCheck className="size-3.5" aria-hidden />
+      </p>
     </motion.div>
   );
 }
@@ -77,11 +73,11 @@ function BolusVisual() {
 /* ---------- Card 2: live event log ---------- */
 
 const EVENTS = [
-  { icon: Thermometer, title: "Vaca #010 · Temperatura 40,3 °C", detail: "Por encima de su rango normal", time: "14:32" },
-  { icon: TrendingDown, title: "Vaca #057 · Rumia 5,1 h", detail: "38 % menos que su promedio", time: "14:35" },
-  { icon: Activity, title: "Vaca #128 · Actividad alta", detail: "Comportamiento compatible con celo", time: "14:41" },
-  { icon: Footprints, title: "Ternero #021 · Sin movimiento 6 h", detail: "Revisión sugerida en la recorrida", time: "14:48" },
-  { icon: CircleCheck, title: "Vaca #342 · Valores normales", detail: "Alerta anterior cerrada", time: "14:52" },
+  { icon: UserRound, title: "Cliente · Martina López", detail: "Lo saqué de tu mensaje", time: "10:41" },
+  { icon: FileText, title: "Concepto · Diseño de logo", detail: "Factura C del monotributo", time: "10:41" },
+  { icon: HandCoins, title: "Monto · $45.000", detail: "“45 lucas”, como me dijiste", time: "10:41" },
+  { icon: CircleCheck, title: "Borrador listo · ¿La emito?", detail: "Esperando tu confirmación", time: "10:41" },
+  { icon: Landmark, title: "Emitida en ARCA · 0001-00000128", detail: "Te mandé el PDF por WhatsApp", time: "10:42" },
 ];
 
 function EventLog() {
@@ -116,8 +112,8 @@ function EventLog() {
     <div ref={ref} className="w-full max-w-md rounded-2xl bg-black/45 p-4 text-white shadow-[0_24px_60px_-20px_rgb(0_0_0/0.6)] ring-1 ring-white/15 backdrop-blur-xl">
       <div className="flex items-center gap-2.5 px-1 pb-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={asset("/brand/logo-poppins.svg")} alt="core" width={277} height={86} className="h-3.5 w-auto brightness-0 invert" />
-        <span className="text-sm font-medium">Registrando eventos</span>
+        <img src={SOCIO_AVATAR} alt="" width={20} height={20} className="size-5 rounded-full" />
+        <span className="text-sm font-medium">Armando tu factura</span>
         <span className="ml-auto flex items-center gap-1.5 text-xs text-white/60">
           <span className="relative flex size-1.5">
             <span className="absolute inline-flex size-full rounded-full bg-core-green opacity-70 motion-safe:animate-ping" />
@@ -151,12 +147,12 @@ function EventLog() {
                       {!newest || done ? (
                         <>
                           <Check className="size-3.5" aria-hidden />
-                          <span className="hidden sm:inline">Registrado</span>
+                          <span className="hidden sm:inline">Listo</span>
                         </>
                       ) : (
                         <>
                           <LoaderCircle className="size-3.5 animate-spin" aria-hidden />
-                          <span className="hidden sm:inline">Registrando…</span>
+                          <span className="hidden sm:inline">Leyendo…</span>
                         </>
                       )}
                     </span>
@@ -180,11 +176,11 @@ function EventLog() {
 const ExpandContext = createContext<MotionValue<number> | null>(null);
 
 const ALERTS = [
-  { title: "Rumia baja · Vaca #402", body: "Bajó 38 % en 6 h. Tocá para ver su panel." },
-  { title: "Fiebre · Vaca #010", body: "40,3 °C hace 3 h. Avisamos al veterinario." },
-  { title: "Celo · Vaca #128", body: "Buen momento para inseminar: mañana temprano." },
-  { title: "Sin actividad · Ternero #021", body: "6 h sin moverse. Revisalo en el potrero norte." },
-  { title: "Resumen semanal", body: "118 de 120 animales con valores normales." },
+  { title: "Emitida en ARCA · Martina López", body: "Factura C 0001-00000128. Acá tenés el PDF." },
+  { title: "Entró $32.000 de Lucía", body: "Mercado Pago. ¿La facturamos?" },
+  { title: "Entró $18.500 de Diego", body: "Transferencia. Ya quedó anotada." },
+  { title: "Ojo con el tope", body: "Te falta poco para el tope de tu categoría." },
+  { title: "Te deben $120.000", body: "García, López y Taller Ruiz. ¿Les aviso?" },
 ];
 const AGO = ["ahora", "hace 12 min", "hace 42 min"];
 
@@ -193,9 +189,9 @@ function Notification({ alert, ago, showContent }: { alert: (typeof ALERTS)[numb
     <div className="relative isolate overflow-hidden rounded-[23px] bg-white/[0.06] py-3 pr-4 pl-3.5 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.55),inset_0_-1px_0_rgb(255_255_255/0.18),inset_1px_0_0_rgb(255_255_255/0.22),inset_-1px_0_0_rgb(255_255_255/0.22),0_10px_30px_-6px_rgb(0_30_70/0.25)] ring-[0.5px] ring-white/25 backdrop-blur-2xl backdrop-brightness-[0.88] backdrop-saturate-[1.25]">
       <span aria-hidden className="pointer-events-none absolute inset-0 -z-10 rounded-[inherit] bg-[radial-gradient(120%_90%_at_20%_0%,rgb(255_255_255/0.28),transparent_55%)]" />
       <div className={"flex items-center gap-[11px] [text-shadow:0_1px_2px_rgb(0_20_50/0.25)] transition-opacity duration-200 " + (showContent ? "opacity-100" : "opacity-0")}>
-        <span className="flex size-[38px] shrink-0 items-center justify-center rounded-[10px] bg-white">
+        <span className="flex size-[38px] shrink-0 items-center justify-center overflow-hidden rounded-[10px] bg-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={asset("/brand/logo-poppins.svg")} alt="" width={277} height={86} className="h-auto w-6" />
+          <img src={SOCIO_AVATAR} alt="" width={38} height={38} className="size-full rounded-[10px] object-cover" />
         </span>
         <div className="min-w-0 flex-1 text-[15px] leading-5">
           <div className="flex items-baseline gap-2">
@@ -292,22 +288,22 @@ type Card = {
 
 const CARDS: Card[] = [
   {
-    title: "Un sensor adentro de cada animal",
-    text: "El bolo de core vive en el rumen y registra sus signos vitales, todo el día.",
+    title: "Me mandás un audio",
+    text: "O un mensaje, o una foto. Con tus palabras, como le hablarías a alguien de confianza.",
     side: "left",
     image: asset("/images/producto/card1.jpg"),
-    content: <BolusVisual />,
+    content: <VoiceNote />,
   },
   {
-    title: "Cada señal, registrada",
-    text: "La plataforma interpreta lo que mide el bolo y registra el comportamiento de cada animal.",
+    title: "Armo la factura",
+    text: "Te la muestro antes de hacer nada: cliente, concepto y monto.",
     side: "right",
     image: asset("/images/producto/campo-espigas.jpg"),
     content: <EventLog />,
   },
   {
-    title: "Las alertas llegan a tu celular",
-    text: "Cuando algo no es normal, te avisamos al instante con lo que tenés que hacer.",
+    title: "Con tu confirmación, la emito en ARCA",
+    text: "Sin tu confirmación no se emite nada. Te llega el PDF por WhatsApp, listo para mandárselo a tu cliente.",
     side: "left",
     image: asset("/images/producto/cielo.jpg"),
     dither: false,

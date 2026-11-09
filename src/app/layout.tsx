@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "core",
+  title: "SOCIO | Facturá en ARCA por WhatsApp y sabé quién te debe",
   description:
-    "Sensores dentro del animal y AI para monitorear el ganado y anticipar problemas.",
+    "Le escribís o le mandás un audio por WhatsApp: SOCIO hace tu factura A, B o C en ARCA, anota tus cobros y te dice quién te debe. 5 facturas gratis.",
 };
 
 export default function RootLayout({
