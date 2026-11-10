@@ -26,9 +26,10 @@ const HERO_VIDEOS: Record<string, string> = {
   a: "a-contable",
   b: "b-comercio",
   c: "c-oficina",
+  d: "d-mix",
 };
 
-/** Test switch: ?hero=a, b or c plays one of the hero videos; no param keeps the photo. */
+/** Test switch: ?hero=a, b, c or d plays one of the hero videos; no param keeps the photo. */
 function useHeroVideo() {
   const [name, setName] = useState<string | null>(null);
   useEffect(() => {
