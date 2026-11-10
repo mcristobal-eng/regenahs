@@ -22,7 +22,57 @@ import { Reveal } from "./shared";
 import { WhatsAppPill } from "./whatsapp-pill";
 
 /** Fondo del hero: foto con un zoom lento y el mismo recorte con bordes redondeados al hacer scroll. */
+const HERO_VIDEOS: Record<string, string> = {
+  a: "a-ciudad-trabajo",
+  b: "b-oficina-contable",
+  c: "c-buenos-aires",
+};
+
+/** Test switch: ?hero=a, b or c plays one of the hero videos; no param keeps the photo. */
+function useHeroVideo() {
+  const [name, setName] = useState<string | null>(null);
+  useEffect(() => {
+    const v = new URLSearchParams(window.location.search).get("hero") ?? "";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setName(HERO_VIDEOS[v] ?? null);
+  }, []);
+  return name;
+}
+
+function HeroVideo({ name }: { name: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    v.load();
+    v.play().catch(() => {});
+  }, [name]);
+  const base = `/sites/socio/hero/${name}`;
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={`${base}-poster.jpg`} alt="" className="absolute inset-0 size-full object-cover" />
+      <video
+        ref={ref}
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={`${base}-poster.jpg`}
+        onPlaying={() => setPlaying(true)}
+        className={cn("absolute inset-0 size-full object-cover transition-opacity duration-700", playing ? "opacity-100" : "opacity-0")}
+      >
+        <source media="(max-width: 767px)" src={`${base}-720.mp4`} type="video/mp4" />
+        <source src={`${base}-1080.mp4`} type="video/mp4" />
+      </video>
+    </>
+  );
+}
+
 function HeroBackground() {
+  const video = useHeroVideo();
   const ref = useRef<HTMLDivElement>(null);
   const inset = useRef(24);
   const reduced = useReducedMotion();
@@ -49,15 +99,19 @@ function HeroBackground() {
         className="absolute inset-0 overflow-hidden bg-core-ink will-change-[clip-path]"
         style={reduced ? undefined : { clipPath }}
       >
-        <motion.img
-          src={SOCIO_PHOTOS.hero}
-          alt=""
-          fetchPriority="high"
-          className="absolute inset-0 size-full object-cover object-[60%_40%]"
-          initial={reduced ? false : { scale: 1.08 }}
-          animate={reduced ? undefined : { scale: 1 }}
-          transition={{ duration: 8, ease: [0.22, 1, 0.36, 1] }}
-        />
+        {video ? (
+          <HeroVideo name={video} />
+        ) : (
+          <motion.img
+            src={SOCIO_PHOTOS.hero}
+            alt=""
+            fetchPriority="high"
+            className="absolute inset-0 size-full object-cover object-[60%_40%]"
+            initial={reduced ? false : { scale: 1.08 }}
+            animate={reduced ? undefined : { scale: 1 }}
+            transition={{ duration: 8, ease: [0.22, 1, 0.36, 1] }}
+          />
+        )}
         <div className="absolute inset-0 bg-noche/30 mix-blend-multiply" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/55" />
       </motion.div>
