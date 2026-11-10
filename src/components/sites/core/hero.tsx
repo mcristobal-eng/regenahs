@@ -23,9 +23,9 @@ import { WhatsAppPill } from "./whatsapp-pill";
 
 /** Fondo del hero: foto con un zoom lento y el mismo recorte con bordes redondeados al hacer scroll. */
 const HERO_VIDEOS: Record<string, string> = {
-  a: "a-ciudad-trabajo",
-  b: "b-oficina-contable",
-  c: "c-buenos-aires",
+  a: "a-contable",
+  b: "b-comercio",
+  c: "c-oficina",
 };
 
 /** Test switch: ?hero=a, b or c plays one of the hero videos; no param keeps the photo. */
